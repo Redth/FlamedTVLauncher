@@ -9,3 +9,12 @@ While it's not possible (yet/without root) to actually replace the launcher app,
 
 ###Where's the Java?
 If you looked at the source, you may have noticed that there's no Java.  That's because this was written entirely in C# using [Xamarin](http://xamarin.com)!  C# is awesome, go use Xamarin!
+
+###What's next?
+Obviously this launcher is very simple, and there's not much to it.  I'm planning on adding some Settings configuration within the app, so you can do things like hide apps, reorder them, hide labels, change colors, etc.
+
+If you have a feature you really want, open an issue here!
+
+###Thanks
+Do you like this project?  I'd be ever so grateful if you bought me a beer!
+[Donate now, via PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2GQPW92YLPY56)
