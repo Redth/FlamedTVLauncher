@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="140dp"
     android:layout_height="140dp"
-    android:gravity="center">
+    android:gravity="center"
+    android:background="?android:attr/activatedBackgroundIndicator">
     <ImageView
         android:src="@android:drawable/ic_menu_gallery"
         android:layout_width="match_parent"

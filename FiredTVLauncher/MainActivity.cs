@@ -37,11 +37,26 @@ namespace FiredTVLauncher
 
 			gridView.ItemClick += (sender, e) => {
 				var app = adapter[e.Position];
+
+				// If we're launching home, tell the service that checks
+				// for intercepting this that it's ok
+				if (app.App.PackageName == Settings.HOME_PACKAGE_NAME)
+					ExcuseMeService.AllowFireTVHome = true;
+
 				StartActivity (app.LaunchIntent);
 			};
 			gridView.Adapter = adapter;
 
 			adapter.Reload ();
+		}
+
+		protected override void OnResume ()
+		{
+			base.OnResume ();
+
+			// Tell the service to continue checking again now
+			// that we've resumed our launcher
+			ExcuseMeService.AllowFireTVHome = false;
 		}
 	}
 
@@ -107,7 +122,7 @@ namespace FiredTVLauncher
 		public static List<AppInfo> FetchApps (Context context)
 		{
 			var results = new List<AppInfo> ();
-			var apps = context.PackageManager.GetInstalledApplications (Android.Content.PM.PackageInfoFlags.Activities);
+			var apps = context.PackageManager.GetInstalledApplications (PackageInfoFlags.Activities);
 
 			foreach (var app in apps) {
 
@@ -119,7 +134,7 @@ namespace FiredTVLauncher
 						continue;
 
 					var label = app.LoadLabel (context.PackageManager);
-					if (app.PackageName == "com.amazon.tv.launcher") {
+					if (app.PackageName == Settings.HOME_PACKAGE_NAME) {
 						if (Settings.Instance.HideFireTVApp)
 							continue;
 						label = "FireTV";

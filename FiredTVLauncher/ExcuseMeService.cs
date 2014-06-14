@@ -12,10 +12,6 @@ namespace FiredTVLauncher
 	[Service]
 	public class ExcuseMeService : IntentService
 	{
-		const string HOME_PACKAGE_NAME = "com.amazon.tv.launcher";
-		const string HOME_CLASS_NAME = "com.amazon.tv.launcher.ui.HomeActivity";
-		const int CHECK_INTERVAL_MS = 700;
-
 		public ExcuseMeService ()
 		{
 		}
@@ -23,15 +19,18 @@ namespace FiredTVLauncher
 		Timer timer;
 		bool didAct = false;
 
+		public static bool AllowFireTVHome = false;
+		ActivityManager activityManager;
+
 		protected override void OnHandleIntent (Intent intent)
 		{
 			if (timer == null) {
+				activityManager = ActivityManager.FromContext (this);
+
 				timer = new Timer (state => {
-
-					DateTime started = DateTime.UtcNow;
-
-					var am = ActivityManager.FromContext (this);
-					var topTask = am.GetRunningTasks (1).FirstOrDefault ();
+				
+					// Gets the topmost running task
+					var topTask = activityManager.GetRunningTasks (1).FirstOrDefault ();
 
 					if (topTask == null || topTask.TopActivity == null)
 						return;
@@ -41,11 +40,13 @@ namespace FiredTVLauncher
 					// package name and class name
 					//		Package Name: com.amazon.tv.launcher
 					//		Class Name:   com.amazon.tv.launcher.ui.HomeActivity
-					if (topTask.TopActivity.PackageName == HOME_PACKAGE_NAME
-						&& topTask.TopActivity.ClassName == HOME_CLASS_NAME) {
+					if (topTask.TopActivity.PackageName == Settings.HOME_PACKAGE_NAME
+						&& topTask.TopActivity.ClassName == Settings.HOME_CLASS_NAME) {
 
 						// Just to be safe, we don't want to call this multiple times in a row
-						if (!didAct) {
+						// Also there's a static flag that the firedtv app can set
+						// to allow the user to launch the firetv homescreen
+						if (!didAct && !AllowFireTVHome) {
 
 							//Come back to papa
 							var actIntent = new Intent(ApplicationContext, typeof(MainActivity));
@@ -61,10 +62,7 @@ namespace FiredTVLauncher
 						didAct = false;
 					}
 
-					var finished = DateTime.UtcNow - started;
-					Console.WriteLine ("Took: " + finished.TotalMilliseconds + " ms");
-
-				}, null, CHECK_INTERVAL_MS, CHECK_INTERVAL_MS);
+				}, null, Settings.Instance.HomeDetectIntervalMs, Settings.Instance.HomeDetectIntervalMs);
 			}
 		}
 	}

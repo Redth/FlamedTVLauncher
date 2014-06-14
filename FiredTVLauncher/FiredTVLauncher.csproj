@@ -49,10 +49,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExcuseMeService.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="BootBroadcastReceiver.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\AboutResources.txt" />
-    <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -62,9 +61,11 @@
     <AndroidResource Include="Resources\layout\GridItemLayout.axml" />
     <AndroidResource Include="Resources\drawable-xhdpi\firedtv.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\settings.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Resources\drawable-xhdpi\" />
+    <Folder Include="Assets\" />
   </ItemGroup>
 </Project>

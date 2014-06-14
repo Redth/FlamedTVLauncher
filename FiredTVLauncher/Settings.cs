@@ -15,6 +15,9 @@ namespace FiredTVLauncher
 {
 	public class Settings
 	{
+		public const string HOME_PACKAGE_NAME = "com.amazon.tv.launcher";
+		public const string HOME_CLASS_NAME = "com.amazon.tv.launcher.ui.HomeActivity";
+
 		static Settings()
 		{
 			Instance = new Settings ();
@@ -23,6 +26,8 @@ namespace FiredTVLauncher
 		public static Settings Instance { get; set; }
 		public Settings ()
 		{
+			HomeDetectIntervalMs = 700;
+
 			Blacklist = new List<string> ();
 
 			if (Blacklist.Count <= 0) {
@@ -45,6 +50,8 @@ namespace FiredTVLauncher
 
 		public bool HideLabels { get; set; }
 		public int LabelFontSize { get; set; }
+
+		public int HomeDetectIntervalMs { get; set; }
 	}
 }
 
