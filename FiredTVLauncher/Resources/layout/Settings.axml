@@ -7,6 +7,11 @@
             android:key="pref_blacklist"
             android:title="Show / Hide Apps"
             android:summary="Choose which apps to show and hide from the home screen" />
+        <Preference
+            android:id="@+id/pref_reorder"
+            android:key="pref_reorder"
+            android:title="Re-Order Apps"
+            android:summary="Re-order how apps appear on the home screen" />
         <EditTextPreference
             android:id="@+id/pref_applabelfontsize"
             android:title="App Label Font Size"
@@ -36,5 +41,11 @@
             android:key="pref_hidetime"
             android:title="Hide Time"
             android:summary="Hide the Time on the home screen" />
+        <CheckBoxPreference
+            android:id="@+id/pref_twentyfourhourtime"
+            android:defaultValue="false"
+            android:key="pref_twentyfourhourtime"
+            android:title="24 Clock Time"
+            android:summary="Use a 24 hour clock to display time" />
     </PreferenceCategory>
 </PreferenceScreen>

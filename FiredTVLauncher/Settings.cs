@@ -31,6 +31,7 @@ namespace FiredTVLauncher
 			HomeDetectIntervalMs = 700;
 
 			Blacklist = new List<string> ();
+			Ordering = new List<AppOrder> ();
 
 			if (Blacklist.Count <= 0) {
 				Blacklist.Add ("com.altusapps.firedtvlauncher");
@@ -43,7 +44,10 @@ namespace FiredTVLauncher
 
 			HideLabels = false;
 			LabelFontSize = 18;
+			TwentyFourHourTime = false;
 		}
+
+		public List<AppOrder> Ordering { get; set; }
 
 		public List<string> Blacklist { get; set; }
 
@@ -53,12 +57,75 @@ namespace FiredTVLauncher
 		public bool HideFiredTVLogo { get; set; }
 		public bool HideDate { get;set; }
 		public bool HideTime { get;set; }
+		public bool TwentyFourHourTime { get;set; }
 
 		public int HomeDetectIntervalMs { get; set; }
 
+		public void SanitizeAppOrder(List<AppInfo> apps)
+		{
+			if (apps != null) {
+				foreach (var app in apps) {
+					GetAppOrder (app.PackageName);
+				}
+			}
+
+			Ordering.Sort ((o1, o2) => o1.Order.CompareTo (o2.Order));
+
+			var i = 0;
+			foreach (var app in Ordering)
+				app.Order = i++;
+
+			Save ();
+		}
+
+		public int GetAppOrder (string packageName)
+		{
+			var app = Ordering.FirstOrDefault (ao => ao.PackageName == packageName);
+			if (app == null) {
+				var newOrder = 0;
+				if (Ordering.Any ())
+					newOrder = Ordering.Max (ao => ao.Order) + 1;
+
+				app = new AppOrder { PackageName = packageName, Order = newOrder };
+				Ordering.Add (app);
+
+				Save ();
+			}
+
+			return app.Order;
+		}
+
+		public int MoveAppOrder (string packageName, int currentOrder, int newOrder)
+		{
+			var currentAppOrder = Ordering.FirstOrDefault (ao => ao.PackageName == packageName);
+
+			if (currentAppOrder == null)
+				return -1;
+
+			if (newOrder < currentOrder) {
+				foreach (var appOrder in Ordering) {
+
+					if (appOrder.Order >= newOrder && appOrder.PackageName != packageName)
+						appOrder.Order++;
+				}
+			} else if (newOrder > currentOrder) {
+				foreach (var appOrder in Ordering) {
+					if (appOrder.Order >= currentOrder && appOrder.Order <= newOrder && appOrder.PackageName != packageName) {
+						appOrder.Order--; 
+					}
+				}
+			}
+
+			currentAppOrder.Order = newOrder;
+
+			SanitizeAppOrder (null);
+
+			return newOrder;
+		}
+
 		public static void Save ()
 		{
-			var path = Path.Combine (System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal), "settings.json");
+			var path = Path.Combine (System.Environment.GetFolderPath (System.Environment.SpecialFolder.MyDocuments), "settings.json");
 			var json = new DataContractJsonSerializer (typeof(Settings));
 
 			using (var sw = File.OpenWrite (path)) {
@@ -68,7 +135,7 @@ namespace FiredTVLauncher
 
 		public static void Load ()
 		{
-			var path = Path.Combine (System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal), "settings.json");
+			var path = Path.Combine (System.Environment.GetFolderPath (System.Environment.SpecialFolder.MyDocuments), "settings.json");
 			var json = new DataContractJsonSerializer (typeof(Settings));
 
 			try {
@@ -78,6 +145,14 @@ namespace FiredTVLauncher
 			} catch {
 				Settings.Instance = new Settings ();
 			}
+		}
+
+		public static bool IsFireTV () {
+
+			var manu = Android.OS.Build.Manufacturer;
+			var model = Android.OS.Build.Model;
+
+			return manu.Equals ("Amazon") && model.StartsWith ("AFT", StringComparison.InvariantCultureIgnoreCase);
 		}
 	}
 }

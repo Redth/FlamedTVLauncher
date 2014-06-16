@@ -17,19 +17,23 @@ namespace FiredTVLauncher
 	[Activity (Label = "FiredTV")]
 	public class MainActivity : Activity
 	{
+
 		Timer timerUpdate;
 		AppsAdapter adapter;
 		GridView gridView;
 		TextView textDate;
 		TextView textTime;
 		ImageView imageLogo;
-
+		bool reorderMode = false;
+		bool tmpIgnore = false;
+		int movingPosition = -1;
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
 
 			Settings.Load ();
 
+			Console.WriteLine ("Is Amazon FireTV: " + Settings.IsFireTV ());
 
 			RequestWindowFeature (WindowFeatures.NoTitle);
 			// Set our view from the "main" layout resource
@@ -49,6 +53,16 @@ namespace FiredTVLauncher
 			adapter = new AppsAdapter () { Context = this };
 
 			gridView.ItemClick += (sender, e) => {
+
+				if (reorderMode) {
+					reorderMode = false;
+
+					//AppOrder.SanitizeOrder (adapter.Apps);
+
+					Toast.MakeText (this, "Exited App Ordering Mode...", ToastLength.Long).Show ();
+					return;
+				}
+
 				var app = adapter[e.Position];
 
 				// If we're launching home, tell the service that checks
@@ -58,6 +72,30 @@ namespace FiredTVLauncher
 
 				StartActivity (app.LaunchIntent);
 			};
+			gridView.ItemLongClick += (sender, e) => {
+
+				if (!reorderMode) {
+					reorderMode = true;
+					movingPosition = e.Position;
+					Toast.MakeText (this, "Entered App Ordering Mode...", ToastLength.Long).Show ();
+				}
+				//AppOrder.Reorder (adapter.Apps, a.PackageName
+			};
+			gridView.ItemSelected += (sender, e) => {
+
+				if (reorderMode) {
+					var app = adapter[movingPosition];
+
+					Console.WriteLine ("Moving: {0} to {1}", movingPosition, e.Position);
+					Settings.Instance.MoveAppOrder (app.PackageName, movingPosition, e.Position);
+
+					adapter.Sort ();
+					adapter.NotifyDataSetChanged ();
+
+					movingPosition = e.Position;
+				}
+			};
+
 				
 			gridView.Adapter = adapter;
 
@@ -102,13 +140,17 @@ namespace FiredTVLauncher
 				StartActivity (typeof(SettingsActivity));
 				return true;
 			}
+					
 			return base.OnKeyDown (keyCode, e);
 		}
 			
 		void Setup()
 		{
 			RunOnUiThread (() => {
-				textTime.Text = DateTime.Now.ToString ("H:mm tt");
+				var timeFmt = "h:mm tt";
+				if (Settings.Instance.TwentyFourHourTime)
+					timeFmt = "H:mm";
+				textTime.Text = DateTime.Now.ToString (timeFmt);
 				textDate.Text = DateTime.Now.ToString ("dddd MMMM d");
 			});
 		}

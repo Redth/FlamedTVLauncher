@@ -34,7 +34,7 @@ namespace FiredTVLauncher
 				cb.Checked = !cb.Checked;
 
 				if (!cb.Checked)
-					Settings.Instance.Blacklist.RemoveAll (s => s == app.App.PackageName);
+					Settings.Instance.Blacklist.RemoveAll (s => s == app.PackageName);
 				else 
 					Settings.Instance.Blacklist.Add (app.PackageName);
 

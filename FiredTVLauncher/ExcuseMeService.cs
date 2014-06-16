@@ -24,6 +24,11 @@ namespace FiredTVLauncher
 
 		protected override void OnHandleIntent (Intent intent)
 		{
+			if (!Settings.IsFireTV ()) {
+				Console.WriteLine ("Not starting KFTV Watcher Service, not FireTV...");
+				return;
+			}
+
 			if (timer == null) {
 				activityManager = ActivityManager.FromContext (this);
 

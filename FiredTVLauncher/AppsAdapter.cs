@@ -15,17 +15,22 @@ namespace FiredTVLauncher
 
 	public class AppsAdapter : BaseAdapter<AppInfo>
 	{
+		public AppsAdapter ()
+		{
+			Apps = new List<AppInfo> ();
+		}
+
 		public Activity Context { get; set; }
 
-		List<AppInfo> apps = new List<AppInfo> ();
+		public List<AppInfo> Apps { get; set; }
 
 		public override long GetItemId (int position) { return position; } 
-		public override int Count { get { return apps.Count; } }
-		public override AppInfo this [int index] { get { return apps [index]; } }
+		public override int Count { get { return Apps.Count; } }
+		public override AppInfo this [int index] { get { return Apps [index]; } }
 
 		public override View GetView (int position, View convertView, ViewGroup parent)
 		{
-			var app = apps [position];
+			var app = Apps [position];
 			var view = convertView ??
 				LayoutInflater.FromContext (Context).Inflate (Resource.Layout.GridItemLayout, parent, false);
 
@@ -41,12 +46,23 @@ namespace FiredTVLauncher
 			return view;
 		}
 
+		public void Sort () 
+		{
+			Apps.Sort ((a1, a2) => Settings.Instance.GetAppOrder(a1.PackageName).CompareTo(Settings.Instance.GetAppOrder(a2.PackageName)));
+
+		}
+
+
 		public void Reload () 
 		{
 			AppInfo.FetchApps (Context, false, r => {
 
-				apps.Clear ();
-				apps.AddRange (r);
+				Apps.Clear ();
+				Apps.AddRange (r);
+
+				Settings.Instance.SanitizeAppOrder (Apps);
+
+				Sort ();
 
 				Context.RunOnUiThread (NotifyDataSetChanged);
 			});

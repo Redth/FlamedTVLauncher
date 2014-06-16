@@ -17,9 +17,15 @@ namespace FiredTVLauncher
 
 	public class AppInfo : Java.Lang.Object
 	{
+		public AppInfo ()
+		{
+		
+		}
+
 		public Intent LaunchIntent { get;set; }
 		public string Name { get; set; }
 		public ApplicationInfo App { get; set; }
+
 		public string PackageName { get; set; }
 
 		public Drawable GetIcon (Context context)
@@ -55,6 +61,9 @@ namespace FiredTVLauncher
 
 				var launchIntent = context.PackageManager.GetLaunchIntentForPackage (app.PackageName);
 
+				if (app.PackageName == Android.Provider.Settings.ActionSettings)
+					Console.WriteLine ("Settings");
+
 				if (launchIntent != null) {
 
 					if (!ignoreBlacklist && Settings.Instance.Blacklist.Contains (app.PackageName))
@@ -63,7 +72,7 @@ namespace FiredTVLauncher
 					var label = app.LoadLabel (context.PackageManager);
 					if (app.PackageName == Settings.HOME_PACKAGE_NAME)
 						label = "FireTV";
-				
+
 					results.Add (new AppInfo {
 						LaunchIntent = launchIntent,
 						Name = label,
@@ -73,13 +82,14 @@ namespace FiredTVLauncher
 				}
 			}
 
-			results.Add (new AppInfo {
-				LaunchIntent = new Intent (Android.Provider.Settings.ActionSettings),
-				Name = "Settings",
-				App = null,
-				PackageName = Android.Provider.Settings.ActionSettings
-			});
-
+			if (!Settings.Instance.Blacklist.Contains (Android.Provider.Settings.ActionSettings) || ignoreBlacklist) {
+				results.Add (new AppInfo {
+					LaunchIntent = new Intent (Android.Provider.Settings.ActionSettings),
+					Name = "Settings",
+					App = null,
+					PackageName = Android.Provider.Settings.ActionSettings
+				});
+			}
 
 			return results.OrderBy(x => x.Name).ToList ();
 		}

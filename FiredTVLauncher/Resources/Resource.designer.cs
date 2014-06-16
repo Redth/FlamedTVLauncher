@@ -479,32 +479,38 @@ namespace FiredTVLauncher
 			// aapt resource value: 0x7f090001
 			public const int imageView = 2131296257;
 			
-			// aapt resource value: 0x7f09000e
-			public const int imageViewLogo = 2131296270;
+			// aapt resource value: 0x7f090010
+			public const int imageViewLogo = 2131296272;
 			
-			// aapt resource value: 0x7f090009
-			public const int pref_applabelfontsize = 2131296265;
+			// aapt resource value: 0x7f09000a
+			public const int pref_applabelfontsize = 2131296266;
 			
 			// aapt resource value: 0x7f090008
 			public const int pref_blacklist = 2131296264;
 			
-			// aapt resource value: 0x7f09000c
-			public const int pref_hidedate = 2131296268;
-			
-			// aapt resource value: 0x7f09000a
-			public const int pref_hidelabels = 2131296266;
+			// aapt resource value: 0x7f09000d
+			public const int pref_hidedate = 2131296269;
 			
 			// aapt resource value: 0x7f09000b
-			public const int pref_hidelogo = 2131296267;
+			public const int pref_hidelabels = 2131296267;
 			
-			// aapt resource value: 0x7f09000d
-			public const int pref_hidetime = 2131296269;
+			// aapt resource value: 0x7f09000c
+			public const int pref_hidelogo = 2131296268;
 			
-			// aapt resource value: 0x7f090011
-			public const int relativeLayout1 = 2131296273;
+			// aapt resource value: 0x7f09000e
+			public const int pref_hidetime = 2131296270;
 			
-			// aapt resource value: 0x7f090012
-			public const int settingsmenu = 2131296274;
+			// aapt resource value: 0x7f090009
+			public const int pref_reorder = 2131296265;
+			
+			// aapt resource value: 0x7f09000f
+			public const int pref_twentyfourhourtime = 2131296271;
+			
+			// aapt resource value: 0x7f090013
+			public const int relativeLayout1 = 2131296275;
+			
+			// aapt resource value: 0x7f090014
+			public const int settingsmenu = 2131296276;
 			
 			// aapt resource value: 0x7f090004
 			public const int textName = 2131296260;
@@ -512,11 +518,11 @@ namespace FiredTVLauncher
 			// aapt resource value: 0x7f090002
 			public const int textView = 2131296258;
 			
-			// aapt resource value: 0x7f09000f
-			public const int textViewDate = 2131296271;
+			// aapt resource value: 0x7f090011
+			public const int textViewDate = 2131296273;
 			
-			// aapt resource value: 0x7f090010
-			public const int textViewTime = 2131296272;
+			// aapt resource value: 0x7f090012
+			public const int textViewTime = 2131296274;
 			
 			// aapt resource value: 0x7f090006
 			public const int view1 = 2131296262;
