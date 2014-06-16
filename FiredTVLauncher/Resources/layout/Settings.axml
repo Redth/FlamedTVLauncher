@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="General">
+        <Preference
+            android:id="@+id/pref_blacklist"
+            android:key="pref_blacklist"
+            android:title="Show / Hide Apps"
+            android:summary="Choose which apps to show and hide from the home screen" />
+        <EditTextPreference
+            android:id="@+id/pref_applabelfontsize"
+            android:title="App Label Font Size"
+            android:summary="Font size to display the app label"
+            android:key="pref_applabelfontsize" />
+        <CheckBoxPreference
+            android:id="@+id/pref_hidelabels"
+            android:defaultValue="false"
+            android:key="pref_hidelabels"
+            android:title="Hide App Labels"
+            android:summary="Hide the App name label underneath its icon" />
+        <CheckBoxPreference
+            android:id="@+id/pref_hidelogo"
+            android:defaultValue="false"
+            android:key="pref_hidelogo"
+            android:title="Hide FiredTV Logo"
+            android:summary="Hide the FiredTV Logo Image on the home screen" />
+        <CheckBoxPreference
+            android:id="@+id/pref_hidedate"
+            android:defaultValue="false"
+            android:key="pref_hidedate"
+            android:title="Hide Date"
+            android:summary="Hide the Date on the home screen" />
+        <CheckBoxPreference
+            android:id="@+id/pref_hidetime"
+            android:defaultValue="false"
+            android:key="pref_hidetime"
+            android:title="Hide Time"
+            android:summary="Hide the Time on the home screen" />
+    </PreferenceCategory>
+</PreferenceScreen>

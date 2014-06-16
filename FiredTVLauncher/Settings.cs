@@ -10,6 +10,8 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System.Runtime.Serialization.Json;
+using System.IO;
 
 namespace FiredTVLauncher
 {
@@ -45,13 +47,38 @@ namespace FiredTVLauncher
 
 		public List<string> Blacklist { get; set; }
 
-		public bool HideFireTVApp { get; set; }
-		public bool HideSettingsApp { get; set; }
-
 		public bool HideLabels { get; set; }
 		public int LabelFontSize { get; set; }
 
+		public bool HideFiredTVLogo { get; set; }
+		public bool HideDate { get;set; }
+		public bool HideTime { get;set; }
+
 		public int HomeDetectIntervalMs { get; set; }
+
+		public static void Save ()
+		{
+			var path = Path.Combine (System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal), "settings.json");
+			var json = new DataContractJsonSerializer (typeof(Settings));
+
+			using (var sw = File.OpenWrite (path)) {
+				json.WriteObject (sw, Settings.Instance);
+			}
+		}
+
+		public static void Load ()
+		{
+			var path = Path.Combine (System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal), "settings.json");
+			var json = new DataContractJsonSerializer (typeof(Settings));
+
+			try {
+				using (var sw = File.OpenRead (path)) {
+					Settings.Instance = (Settings)json.ReadObject (sw);
+				}
+			} catch {
+				Settings.Instance = new Settings ();
+			}
+		}
 	}
 }
 

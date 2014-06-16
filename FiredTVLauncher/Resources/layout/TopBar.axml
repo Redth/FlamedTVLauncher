@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:src="@android:drawable/ic_menu_gallery"
+            android:layout_width="208dp"
+            android:layout_height="74dp"
+            android:id="@+id/imageViewLogo"
+            android:layout_gravity="center"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="30dp"
+            android:scaleType="centerInside"
+            android:layout_marginBottom="16dp" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="right">
+            <TextView
+                android:text="Monday, June 12"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/textViewDate"
+                android:paddingRight="20dp"
+                android:alpha="0.8" />
+            <TextView
+                android:text="9:00 AM"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/textViewTime"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </FrameLayout>
+    <RelativeLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/relativeLayout1" />
+</LinearLayout>

@@ -9,14 +9,14 @@
         android:minWidth="25px"
         android:minHeight="25px"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:id="@+id/frameLayout1">
-        <ImageView
-            android:src="@android:drawable/ic_menu_gallery"
-            android:layout_width="208dp"
-            android:layout_height="74dp"
-            android:id="@+id/imageViewLogo"
-            android:layout_gravity="center" />
+        android:layout_height="wrap_content"
+        android:id="@+id/frameLayout1"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp">
+        <include
+            layout="@layout/TopBar" />
     </FrameLayout>
     <View
         android:layout_width="match_parent"
@@ -25,6 +25,8 @@
         android:background="#ffba7102"
         android:alpha="0.5" />
     <GridView
+        android:listSelector="@drawable/apptheme_list_selector_holo_dark"
+        android:theme="@style/AppTheme"
         android:minWidth="25px"
         android:minHeight="25px"
         android:layout_width="match_parent"
