@@ -24,14 +24,11 @@ namespace FiredTVLauncher
 		TextView textDate;
 		TextView textTime;
 		ImageView imageLogo;
-		bool reorderMode = false;
-		bool tmpIgnore = false;
-		int movingPosition = -1;
-		protected override void OnCreate (Bundle bundle)
+        View dividerLine;
+		
+        protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
-
-			Settings.Load ();
 
 			Console.WriteLine ("Is Amazon FireTV: " + Settings.IsFireTV ());
 
@@ -42,6 +39,7 @@ namespace FiredTVLauncher
 			textDate = FindViewById<TextView> (Resource.Id.textViewDate);
 			textTime = FindViewById<TextView> (Resource.Id.textViewTime);
 			imageLogo = FindViewById<ImageView> (Resource.Id.imageViewLogo);
+            dividerLine = FindViewById<View> (Resource.Id.dividerLine);
 
 			imageLogo.SetImageResource (Resource.Drawable.firedtv);
 
@@ -54,15 +52,6 @@ namespace FiredTVLauncher
 
 			gridView.ItemClick += (sender, e) => {
 
-				if (reorderMode) {
-					reorderMode = false;
-
-					//AppOrder.SanitizeOrder (adapter.Apps);
-
-					Toast.MakeText (this, "Exited App Ordering Mode...", ToastLength.Long).Show ();
-					return;
-				}
-
 				var app = adapter[e.Position];
 
 				// If we're launching home, tell the service that checks
@@ -72,39 +61,19 @@ namespace FiredTVLauncher
 
 				StartActivity (app.LaunchIntent);
 			};
-			gridView.ItemLongClick += (sender, e) => {
 
-				if (!reorderMode) {
-					reorderMode = true;
-					movingPosition = e.Position;
-					Toast.MakeText (this, "Entered App Ordering Mode...", ToastLength.Long).Show ();
-				}
-				//AppOrder.Reorder (adapter.Apps, a.PackageName
-			};
-			gridView.ItemSelected += (sender, e) => {
-
-				if (reorderMode) {
-					var app = adapter[movingPosition];
-
-					Console.WriteLine ("Moving: {0} to {1}", movingPosition, e.Position);
-					Settings.Instance.MoveAppOrder (app.PackageName, movingPosition, e.Position);
-
-					adapter.Sort ();
-					adapter.NotifyDataSetChanged ();
-
-					movingPosition = e.Position;
-				}
-			};
-
-				
 			gridView.Adapter = adapter;
 
 			timerUpdate = new Timer (state => Setup (), null, Timeout.Infinite, Timeout.Infinite);
+
+            RegisterForContextMenu (gridView);
 		}
 
 		protected override void OnResume ()
 		{
 			base.OnResume ();
+
+            Settings.Load ();
 
 			Setup ();
 
@@ -117,8 +86,11 @@ namespace FiredTVLauncher
 			textDate.Visibility = Settings.Instance.HideDate ? ViewStates.Gone : ViewStates.Visible;
 			textTime.Visibility = Settings.Instance.HideTime ? ViewStates.Gone : ViewStates.Visible;
 			imageLogo.Visibility = Settings.Instance.HideFiredTVLogo ? ViewStates.Gone : ViewStates.Visible;
+            dividerLine.Visibility = Settings.Instance.HideHomeDividerLine ? ViewStates.Gone : ViewStates.Visible;
 
 			timerUpdate.Change (TimeSpan.FromSeconds (10), TimeSpan.FromSeconds (10));
+
+
 		}
 
 		protected override void OnPause ()
@@ -131,9 +103,40 @@ namespace FiredTVLauncher
 
 		public override bool OnPrepareOptionsMenu (IMenu menu)
 		{
+
 			return false;
 		}
 
+
+        public override void OnCreateContextMenu (IContextMenu menu, View v, IContextMenuContextMenuInfo menuInfo)
+        {
+            base.OnCreateContextMenu (menu, v, menuInfo);
+
+
+            menu.Add (0, 0, 0, "Hide App");
+            menu.Add (0, 1, 1, "Uninstall App");
+        }
+
+        public override bool OnContextItemSelected (IMenuItem item)
+        {
+            var info = (AdapterView.AdapterContextMenuInfo) item.MenuInfo;
+
+            var app = adapter [info.Position];
+
+            if (item.ItemId == 0) {
+                // Hide
+                Settings.Instance.Blacklist.Add (app.PackageName);
+                Settings.Save ();
+                adapter.Reload ();
+                Toast.MakeText (this, "Hiding " + app.Name, ToastLength.Short).Show ();
+            } else if (item.ItemId == 1) {
+                // Uninstall
+                var packageUri = Android.Net.Uri.Parse("package:" + app.PackageName);
+                var uninstallIntent = new Intent(Intent.ActionDelete, packageUri);
+                StartActivity (uninstallIntent);
+            }
+            return base.OnContextItemSelected (item);
+        }
 		public override bool OnKeyDown (Keycode keyCode, KeyEvent e)
 		{
 			if (keyCode == Keycode.Menu) {

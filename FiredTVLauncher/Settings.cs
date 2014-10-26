@@ -58,8 +58,11 @@ namespace FiredTVLauncher
 		public bool HideDate { get;set; }
 		public bool HideTime { get;set; }
 		public bool TwentyFourHourTime { get;set; }
+        public bool HideHomeDividerLine { get; set; }
 
 		public int HomeDetectIntervalMs { get; set; }
+
+		public bool DisableHomeDetection { get;set; }
 
 		public void SanitizeAppOrder(List<AppInfo> apps)
 		{
@@ -71,80 +74,91 @@ namespace FiredTVLauncher
 
 			Ordering.Sort ((o1, o2) => o1.Order.CompareTo (o2.Order));
 
-			var i = 0;
+			var i = 1;
 			foreach (var app in Ordering)
 				app.Order = i++;
 
 			Save ();
 		}
 
-		public int GetAppOrder (string packageName)
-		{
-			var app = Ordering.FirstOrDefault (ao => ao.PackageName == packageName);
-			if (app == null) {
-				var newOrder = 0;
-				if (Ordering.Any ())
-					newOrder = Ordering.Max (ao => ao.Order) + 1;
+        public AppOrder GetAppOrder (string packageName)
+        {
+            var order = Ordering.FirstOrDefault (ao => ao.PackageName.Equals (packageName));
 
-				app = new AppOrder { PackageName = packageName, Order = newOrder };
-				Ordering.Add (app);
+            // Make sure the current ordering actually exists
+            if (order == null) {
+                var index = 1;
+                // If it doesn't exist, let's assume last in line
+                var after = Ordering.LastOrDefault ();
+                if (after != null)
+                    index = after.Order + 1;
 
-				Save ();
-			}
+                // Make our order
+                order = new AppOrder {
+                    PackageName = packageName,
+                    Order = index
+                };
 
-			return app.Order;
-		}
+                // Order didn't exist so let's add it
+                Ordering.Add (order);
+            }
 
-		public int MoveAppOrder (string packageName, int currentOrder, int newOrder)
-		{
-			var currentAppOrder = Ordering.FirstOrDefault (ao => ao.PackageName == packageName);
+            return order;
+        }
 
-			if (currentAppOrder == null)
-				return -1;
+        public void MoveOrder (string packageName, bool up)
+        {
+            var order = GetAppOrder (packageName);
 
-			if (newOrder < currentOrder) {
-				foreach (var appOrder in Ordering) {
+            // Can only go so far up
+            if (up && order.Order <= 1)
+                return;
 
-					if (appOrder.Order >= newOrder && appOrder.PackageName != packageName)
-						appOrder.Order++;
-				}
-			} else if (newOrder > currentOrder) {
-				foreach (var appOrder in Ordering) {
-					if (appOrder.Order >= currentOrder && appOrder.Order <= newOrder && appOrder.PackageName != packageName) {
-						appOrder.Order--; 
-					}
-				}
-			}
+            if (!up && order.Order >= Ordering.Count) // Ordering.Last ().PackageName.Equals (packageName))
+                return;
 
-			currentAppOrder.Order = newOrder;
+            if (up)
+                order.Order = order.Order - 1;
+            else
+                order.Order = order.Order + 1;
 
-			SanitizeAppOrder (null);
+            foreach (var appOrder in Ordering) {
+                if (appOrder.Order == order.Order
+                    && !appOrder.PackageName.Equals (order.PackageName)) {
 
-			return newOrder;
-		}
+                    if (up)
+                        appOrder.Order = appOrder.Order + 1;
+                    else
+                        appOrder.Order = appOrder.Order - 1;
+                }
+            }
+
+            Save ();
+        }
 
 		public static void Save ()
 		{
-			var path = Path.Combine (System.Environment.GetFolderPath (System.Environment.SpecialFolder.MyDocuments), "settings.json");
-			var json = new DataContractJsonSerializer (typeof(Settings));
-
-			using (var sw = File.OpenWrite (path)) {
-				json.WriteObject (sw, Settings.Instance);
-			}
+			var path = Path.Combine (System.Environment.GetFolderPath (System.Environment.SpecialFolder.MyDocuments), "settings2.json");
+            try {
+                File.WriteAllText (path, Newtonsoft.Json.JsonConvert.SerializeObject (Settings.Instance));
+                Log.Debug ("Settings Saved to {0}", path);
+            } catch (Exception ex) {
+                Log.Error ("Failed to write settings file", ex);
+            }
 		}
 
-		public static void Load ()
+        public static void Load ()
 		{
-			var path = Path.Combine (System.Environment.GetFolderPath (System.Environment.SpecialFolder.MyDocuments), "settings.json");
-			var json = new DataContractJsonSerializer (typeof(Settings));
+			var path = Path.Combine (System.Environment.GetFolderPath (System.Environment.SpecialFolder.MyDocuments), "settings2.json");
 
-			try {
-				using (var sw = File.OpenRead (path)) {
-					Settings.Instance = (Settings)json.ReadObject (sw);
-				}
-			} catch {
-				Settings.Instance = new Settings ();
-			}
+            try {
+                Settings.Instance = Newtonsoft.Json.JsonConvert.DeserializeObject <Settings> (File.ReadAllText (path));
+                Log.Debug ("Settings Loaded from {0}", path);
+            }
+            catch (Exception ex) {
+                Log.Error ("Failed to load settings file", ex);
+                Settings.Instance = new Settings ();
+            }
 		}
 
 		public static bool IsFireTV () {

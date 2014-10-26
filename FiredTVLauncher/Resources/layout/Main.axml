@@ -19,9 +19,9 @@
             layout="@layout/TopBar" />
     </FrameLayout>
     <View
+        android:id="@+id/dividerLine"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:id="@+id/view1"
         android:background="#ffba7102"
         android:alpha="0.5" />
     <GridView
@@ -39,5 +39,8 @@
         android:verticalSpacing="20dp"
         android:horizontalSpacing="40dp"
         android:gravity="center"
-        android:padding="40dp" />
+        android:padding="0dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="40dp" />
 </LinearLayout>

@@ -23,9 +23,11 @@ namespace FiredTVLauncher
 		EditTextPreference prefAppNameFontSize;
 		CheckBoxPreference prefHideLabels;
 		CheckBoxPreference prefHideLogo;
+        CheckBoxPreference prefHideDividerLine;
 		CheckBoxPreference prefHideDate;
 		CheckBoxPreference prefHideTime;
 		CheckBoxPreference prefTwentyFourHourTime;
+		CheckBoxPreference prefDisableHomeDetect;
 
 
 		protected override void OnCreate (Bundle bundle)
@@ -40,9 +42,11 @@ namespace FiredTVLauncher
 			prefHideLabels = (CheckBoxPreference)FindPreference ("pref_hidelabels");
 			prefAppNameFontSize = (EditTextPreference)FindPreference ("pref_applabelfontsize");
 			prefHideLogo = (CheckBoxPreference)FindPreference ("pref_hidelogo");
+            prefHideDividerLine = (CheckBoxPreference)FindPreference ("pref_hidedivider");
 			prefHideDate = (CheckBoxPreference)FindPreference ("pref_hidedate");
 			prefHideTime = (CheckBoxPreference)FindPreference ("pref_hidetime");
 			prefTwentyFourHourTime = (CheckBoxPreference)FindPreference ("pref_twentyfourhourtime");
+			prefDisableHomeDetect = (CheckBoxPreference)FindPreference ("pref_disablecheck");
 
 			prefAppNameFontSize.EditText.InputType = Android.Text.InputTypes.ClassNumber;
 
@@ -50,25 +54,30 @@ namespace FiredTVLauncher
 				StartActivity (typeof (SettingsAppShowHideActivity));
 			};
 			prefReorder.PreferenceClick += delegate {
-				AlertDialog dlg = null;
-				var bld = new AlertDialog.Builder(this);
 
-				bld.SetTitle ("Re-Order Apps");
-				bld.SetMessage ("To re-order apps on the home screen, select the app you want to re-order, then long click the item.  This will put the app into re-order mode.  You can now move the app around until you are happy with its position, and select the item again once to exit re-order mode");
-				bld.SetNegativeButton("OK", delegate {
-					dlg.Dismiss();
-				});
-
-				dlg = bld.Create();
-				dlg.Show();
+                StartActivity (typeof (ReorderActivity));
+//
+//				AlertDialog dlg = null;
+//				var bld = new AlertDialog.Builder(this);
+//
+//				bld.SetTitle ("Re-Order Apps");
+//				bld.SetMessage ("To re-order apps on the home screen, select the app you want to re-order, then long click the item.  This will put the app into re-order mode.  You can now move the app around until you are happy with its position, and select the item again once to exit re-order mode");
+//				bld.SetNegativeButton("OK", delegate {
+//					dlg.Dismiss();
+//				});
+//
+//				dlg = bld.Create();
+//				dlg.Show();
 			};
 
 			prefAppNameFontSize.PreferenceChange += SaveHandler;
 			prefHideLabels.PreferenceChange += SaveHandler;
 			prefHideLogo.PreferenceChange += SaveHandler;
+            prefHideDividerLine.PreferenceChange += SaveHandler;
 			prefHideDate.PreferenceChange += SaveHandler;
 			prefHideTime.PreferenceChange += SaveHandler;
 			prefTwentyFourHourTime.PreferenceChange += SaveHandler;
+			prefDisableHomeDetect.PreferenceChange += SaveHandler;
 		}
 
 
@@ -79,6 +88,8 @@ namespace FiredTVLauncher
 				Settings.Instance.HideLabels = !prefHideLabels.Checked;
 			if (sender == prefHideLogo)
 				Settings.Instance.HideFiredTVLogo = !prefHideLogo.Checked;
+            if (sender == prefHideDividerLine)
+                Settings.Instance.HideHomeDividerLine = !prefHideDividerLine.Checked;
 			if (sender == prefHideDate)
 				Settings.Instance.HideDate = !prefHideDate.Checked;
 			if (sender == prefTwentyFourHourTime)
@@ -91,6 +102,11 @@ namespace FiredTVLauncher
 				var size = 16;
 				int.TryParse (prefAppNameFontSize.EditText.Text, out size);
 				Settings.Instance.LabelFontSize = size;
+			}
+
+			if (sender == prefDisableHomeDetect) {
+				Settings.Instance.DisableHomeDetection = !prefDisableHomeDetect.Checked;
+				StartService (new Intent(this, typeof(ExcuseMeService)));
 			}
 
 			Settings.Save ();

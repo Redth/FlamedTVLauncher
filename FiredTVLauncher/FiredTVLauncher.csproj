@@ -43,6 +43,9 @@
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
@@ -57,9 +60,12 @@
     <Compile Include="SettingsAppShowHideActivity.cs" />
     <Compile Include="SplashActivity.cs" />
     <Compile Include="AppOrder.cs" />
+    <Compile Include="ReorderActivity.cs" />
+    <Compile Include="Log.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Main.axml" />
@@ -494,6 +500,8 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\apptheme_textfield_disabled_holo_dark.9.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\apptheme_textfield_focused_holo_dark.9.png" />
     <AndroidResource Include="Resources\values\styles.xml" />
+    <AndroidResource Include="Resources\layout\ReorderItemLayout.axml" />
+    <AndroidResource Include="Resources\layout\ReorderLayout.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>

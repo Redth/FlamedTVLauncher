@@ -30,6 +30,12 @@
             android:title="Hide FiredTV Logo"
             android:summary="Hide the FiredTV Logo Image on the home screen" />
         <CheckBoxPreference
+            android:id="@+id/pref_hidedivider"
+            android:defaultValue="false"
+            android:key="pref_hidedivider"
+            android:title="Hide Divider Line"
+            android:summary="Hide the Divider Line under the FiredTV Logo / Time on the home screen" />
+        <CheckBoxPreference
             android:id="@+id/pref_hidedate"
             android:defaultValue="false"
             android:key="pref_hidedate"
@@ -47,5 +53,11 @@
             android:key="pref_twentyfourhourtime"
             android:title="24 Clock Time"
             android:summary="Use a 24 hour clock to display time" />
+        <CheckBoxPreference
+            android:id="@+id/pref_disablecheck"
+            android:defaultValue="false"
+            android:key="pref_disablecheck"
+            android:title="Disable Home Button Detection"
+            android:summary="Stop FiredTV from trying to detect when home is pressed and launching itself" />
     </PreferenceCategory>
 </PreferenceScreen>

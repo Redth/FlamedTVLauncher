@@ -48,7 +48,7 @@ namespace FiredTVLauncher
 
 		public void Sort () 
 		{
-			Apps.Sort ((a1, a2) => Settings.Instance.GetAppOrder(a1.PackageName).CompareTo(Settings.Instance.GetAppOrder(a2.PackageName)));
+			Apps.Sort ((a1, a2) => Settings.Instance.GetAppOrder(a1.PackageName).Order.CompareTo(Settings.Instance.GetAppOrder(a2.PackageName).Order));
 
 		}
 

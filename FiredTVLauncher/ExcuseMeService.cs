@@ -24,6 +24,11 @@ namespace FiredTVLauncher
 
 		protected override void OnHandleIntent (Intent intent)
 		{
+			if (Settings.Instance.DisableHomeDetection) {
+				Console.WriteLine ("Disabled Home Detection... Not starting KFTV Watcher Service...");
+				return;
+			}
+
 			if (!Settings.IsFireTV ()) {
 				Console.WriteLine ("Not starting KFTV Watcher Service, not FireTV...");
 				return;
@@ -34,6 +39,12 @@ namespace FiredTVLauncher
 
 				timer = new Timer (state => {
 				
+					if (Settings.Instance.DisableHomeDetection) {
+						timer.Change (Timeout.Infinite, Timeout.Infinite);
+						timer = null;
+						return;
+					}
+
 					// Gets the topmost running task
 					var topTask = activityManager.GetRunningTasks (1).FirstOrDefault ();
 
