@@ -52,6 +52,8 @@ namespace FiredTVLauncher
 
             WallpaperUrl = "Default";
             WallpaperUse = true;
+
+            DisableHomeDetection = true;
 		}
 
 		public List<AppOrder> Ordering { get; set; }

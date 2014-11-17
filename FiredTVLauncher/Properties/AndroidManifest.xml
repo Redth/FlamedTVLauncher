@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="110" android:versionName="1.1.0" package="com.altusapps.firedtvlauncher">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="111" android:versionName="1.1.1" package="com.altusapps.firedtvlauncher">
 	<uses-sdk android:minSdkVersion="17" />
 	<application android:label="FiredTV" android:icon="@drawable/icon" android:theme="@style/AppTheme">
 	</application>
