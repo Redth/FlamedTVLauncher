@@ -56,8 +56,15 @@ namespace FiredTVLauncher
 
         }
 
+        static bool keyUp = false;
+
         public override bool OnKeyUp (Keycode keyCode, KeyEvent e)
         {
+            if (keyUp)
+                return true;
+
+            keyUp = true;
+
             base.OnKeyUp (keyCode, e);
 
             if (adapter.SelectedPosition >= 0) {
@@ -67,16 +74,19 @@ namespace FiredTVLauncher
                     adapter.Reorder (adapter.SelectedPosition, true);
                     ListView.SetSelection (adapter.SelectedPosition);
                     ScrollListView ();
+                    keyUp = false;
                     return true;
                 } else if (e.KeyCode == Keycode.DpadDown) {
                     Console.WriteLine ("ORDER DOWN");
                     adapter.Reorder (adapter.SelectedPosition, false);
                     ListView.SetSelection (adapter.SelectedPosition);
                     ScrollListView ();
+                    keyUp = false;
                     return true;
                 }
             }
 
+            keyUp = false;
             return false;
         }
 
