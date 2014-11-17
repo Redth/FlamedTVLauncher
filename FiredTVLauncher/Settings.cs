@@ -45,24 +45,46 @@ namespace FiredTVLauncher
 			HideLabels = false;
 			LabelFontSize = 18;
 			TwentyFourHourTime = false;
+
+            IconBackgroundAlpha = 120;
+            LabelBackgroundAlpha = 200;
+            TopInfoBarBackgroundAlpha = 120;
+
+            WallpaperUrl = "Default";
+            WallpaperUse = true;
 		}
 
 		public List<AppOrder> Ordering { get; set; }
 
 		public List<string> Blacklist { get; set; }
 
+        public bool HideTopBar { get; set; }
 		public bool HideLabels { get; set; }
 		public int LabelFontSize { get; set; }
 
-		public bool HideFiredTVLogo { get; set; }
 		public bool HideDate { get;set; }
 		public bool HideTime { get;set; }
 		public bool TwentyFourHourTime { get;set; }
-        public bool HideHomeDividerLine { get; set; }
+
+        public int IconBackgroundAlpha { get;set; }
+        public int TopInfoBarBackgroundAlpha { get;set; }
+        public int LabelBackgroundAlpha { get;set; }
 
 		public int HomeDetectIntervalMs { get; set; }
 
 		public bool DisableHomeDetection { get;set; }
+
+        public bool WallpaperUse { get;set; }
+        public string WallpaperUrl { get;set; }
+
+
+        public static string GetWallpaperFilename() 
+        {
+            var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+            var filename = System.IO.Path.Combine(path, "wallpaper.png");
+            return filename;
+        }
+
 
 		public void SanitizeAppOrder(List<AppInfo> apps)
 		{
@@ -163,8 +185,8 @@ namespace FiredTVLauncher
 
 		public static bool IsFireTV () {
 
-			var manu = Android.OS.Build.Manufacturer;
-			var model = Android.OS.Build.Model;
+			var manu = Build.Manufacturer;
+			var model = Build.Model;
 
 			return manu.Equals ("Amazon") && model.StartsWith ("AFT", StringComparison.InvariantCultureIgnoreCase);
 		}

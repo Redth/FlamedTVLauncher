@@ -26,10 +26,83 @@ namespace FiredTVLauncher
 		
 		public static void UpdateIdValues()
 		{
+			global::AndroidHUD.Resource.Attribute.ahBarColor = global::FiredTVLauncher.Resource.Attribute.ahBarColor;
+			global::AndroidHUD.Resource.Attribute.ahBarLength = global::FiredTVLauncher.Resource.Attribute.ahBarLength;
+			global::AndroidHUD.Resource.Attribute.ahBarWidth = global::FiredTVLauncher.Resource.Attribute.ahBarWidth;
+			global::AndroidHUD.Resource.Attribute.ahCircleColor = global::FiredTVLauncher.Resource.Attribute.ahCircleColor;
+			global::AndroidHUD.Resource.Attribute.ahDelayMillis = global::FiredTVLauncher.Resource.Attribute.ahDelayMillis;
+			global::AndroidHUD.Resource.Attribute.ahRadius = global::FiredTVLauncher.Resource.Attribute.ahRadius;
+			global::AndroidHUD.Resource.Attribute.ahRimColor = global::FiredTVLauncher.Resource.Attribute.ahRimColor;
+			global::AndroidHUD.Resource.Attribute.ahRimWidth = global::FiredTVLauncher.Resource.Attribute.ahRimWidth;
+			global::AndroidHUD.Resource.Attribute.ahSpinSpeed = global::FiredTVLauncher.Resource.Attribute.ahSpinSpeed;
+			global::AndroidHUD.Resource.Attribute.ahText = global::FiredTVLauncher.Resource.Attribute.ahText;
+			global::AndroidHUD.Resource.Attribute.ahTextColor = global::FiredTVLauncher.Resource.Attribute.ahTextColor;
+			global::AndroidHUD.Resource.Attribute.ahTextSize = global::FiredTVLauncher.Resource.Attribute.ahTextSize;
+			global::AndroidHUD.Resource.Drawable.ic_errorstatus = global::FiredTVLauncher.Resource.Drawable.ic_errorstatus;
+			global::AndroidHUD.Resource.Drawable.ic_successstatus = global::FiredTVLauncher.Resource.Drawable.ic_successstatus;
+			global::AndroidHUD.Resource.Drawable.roundedbg = global::FiredTVLauncher.Resource.Drawable.roundedbg;
+			global::AndroidHUD.Resource.Drawable.roundedbgdark = global::FiredTVLauncher.Resource.Drawable.roundedbgdark;
+			global::AndroidHUD.Resource.Id.loadingImage = global::FiredTVLauncher.Resource.Id.loadingImage;
+			global::AndroidHUD.Resource.Id.loadingProgressBar = global::FiredTVLauncher.Resource.Id.loadingProgressBar;
+			global::AndroidHUD.Resource.Id.loadingProgressWheel = global::FiredTVLauncher.Resource.Id.loadingProgressWheel;
+			global::AndroidHUD.Resource.Id.textViewStatus = global::FiredTVLauncher.Resource.Id.textViewStatus;
+			global::AndroidHUD.Resource.Layout.loading = global::FiredTVLauncher.Resource.Layout.loading;
+			global::AndroidHUD.Resource.Layout.loadingimage = global::FiredTVLauncher.Resource.Layout.loadingimage;
+			global::AndroidHUD.Resource.Layout.loadingprogress = global::FiredTVLauncher.Resource.Layout.loadingprogress;
+			global::AndroidHUD.Resource.String.library_name = global::FiredTVLauncher.Resource.String.library_name;
+			global::AndroidHUD.Resource.Styleable.ProgressWheel = global::FiredTVLauncher.Resource.Styleable.ProgressWheel;
+			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahBarColor = global::FiredTVLauncher.Resource.Styleable.ProgressWheel_ahBarColor;
+			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahBarLength = global::FiredTVLauncher.Resource.Styleable.ProgressWheel_ahBarLength;
+			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahBarWidth = global::FiredTVLauncher.Resource.Styleable.ProgressWheel_ahBarWidth;
+			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahCircleColor = global::FiredTVLauncher.Resource.Styleable.ProgressWheel_ahCircleColor;
+			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahDelayMillis = global::FiredTVLauncher.Resource.Styleable.ProgressWheel_ahDelayMillis;
+			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahRadius = global::FiredTVLauncher.Resource.Styleable.ProgressWheel_ahRadius;
+			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahRimColor = global::FiredTVLauncher.Resource.Styleable.ProgressWheel_ahRimColor;
+			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahRimWidth = global::FiredTVLauncher.Resource.Styleable.ProgressWheel_ahRimWidth;
+			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahSpinSpeed = global::FiredTVLauncher.Resource.Styleable.ProgressWheel_ahSpinSpeed;
+			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahText = global::FiredTVLauncher.Resource.Styleable.ProgressWheel_ahText;
+			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahTextColor = global::FiredTVLauncher.Resource.Styleable.ProgressWheel_ahTextColor;
+			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahTextSize = global::FiredTVLauncher.Resource.Styleable.ProgressWheel_ahTextSize;
 		}
 		
 		public partial class Attribute
 		{
+			
+			// aapt resource value: 0x7f010003
+			public const int ahBarColor = 2130771971;
+			
+			// aapt resource value: 0x7f01000b
+			public const int ahBarLength = 2130771979;
+			
+			// aapt resource value: 0x7f01000a
+			public const int ahBarWidth = 2130771978;
+			
+			// aapt resource value: 0x7f010008
+			public const int ahCircleColor = 2130771976;
+			
+			// aapt resource value: 0x7f010007
+			public const int ahDelayMillis = 2130771975;
+			
+			// aapt resource value: 0x7f010009
+			public const int ahRadius = 2130771977;
+			
+			// aapt resource value: 0x7f010004
+			public const int ahRimColor = 2130771972;
+			
+			// aapt resource value: 0x7f010005
+			public const int ahRimWidth = 2130771973;
+			
+			// aapt resource value: 0x7f010006
+			public const int ahSpinSpeed = 2130771974;
+			
+			// aapt resource value: 0x7f010000
+			public const int ahText = 2130771968;
+			
+			// aapt resource value: 0x7f010001
+			public const int ahTextColor = 2130771969;
+			
+			// aapt resource value: 0x7f010002
+			public const int ahTextSize = 2130771970;
 			
 			static Attribute()
 			{
@@ -44,11 +117,11 @@ namespace FiredTVLauncher
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f040000
-			public const int apptheme_color = 2130968576;
+			// aapt resource value: 0x7f050000
+			public const int apptheme_color = 2131034112;
 			
-			// aapt resource value: 0x7f040001
-			public const int black = 2130968577;
+			// aapt resource value: 0x7f050001
+			public const int black = 2131034113;
 			
 			static Color()
 			{
@@ -63,8 +136,8 @@ namespace FiredTVLauncher
 		public partial class Dimension
 		{
 			
-			// aapt resource value: 0x7f050000
-			public const int tab_host_default_height = 2131034112;
+			// aapt resource value: 0x7f060000
+			public const int tab_host_default_height = 2131099648;
 			
 			static Dimension()
 			{
@@ -446,10 +519,25 @@ namespace FiredTVLauncher
 			public const int firedtv = 2130837625;
 			
 			// aapt resource value: 0x7f02007a
-			public const int Icon = 2130837626;
+			public const int ic_errorstatus = 2130837626;
 			
 			// aapt resource value: 0x7f02007b
-			public const int settings = 2130837627;
+			public const int ic_successstatus = 2130837627;
+			
+			// aapt resource value: 0x7f02007c
+			public const int Icon = 2130837628;
+			
+			// aapt resource value: 0x7f02007d
+			public const int roundedbg = 2130837629;
+			
+			// aapt resource value: 0x7f02007e
+			public const int roundedbgdark = 2130837630;
+			
+			// aapt resource value: 0x7f02007f
+			public const int settings = 2130837631;
+			
+			// aapt resource value: 0x7f020080
+			public const int wallpaper = 2130837632;
 			
 			static Drawable()
 			{
@@ -467,77 +555,122 @@ namespace FiredTVLauncher
 			// aapt resource value: 0x7f090000
 			public const int checkBox = 2131296256;
 			
-			// aapt resource value: 0x7f090006
-			public const int dividerLine = 2131296262;
+			// aapt resource value: 0x7f09000d
+			public const int frameTopBar = 2131296269;
 			
-			// aapt resource value: 0x7f090005
-			public const int frameLayout1 = 2131296261;
+			// aapt resource value: 0x7f09000a
+			public const int frameWallpaper = 2131296266;
 			
-			// aapt resource value: 0x7f090007
-			public const int gridView = 2131296263;
+			// aapt resource value: 0x7f09000c
+			public const int gridView = 2131296268;
 			
 			// aapt resource value: 0x7f090003
-			public const int imageIcon = 2131296259;
+			public const int iconBackground = 2131296259;
 			
-			// aapt resource value: 0x7f090009
-			public const int imageReorder = 2131296265;
+			// aapt resource value: 0x7f090004
+			public const int imageIcon = 2131296260;
+			
+			// aapt resource value: 0x7f090011
+			public const int imageReorder = 2131296273;
 			
 			// aapt resource value: 0x7f090001
 			public const int imageView = 2131296257;
 			
-			// aapt resource value: 0x7f090014
-			public const int imageViewLogo = 2131296276;
-			
-			// aapt resource value: 0x7f090008
-			public const int linearLayout1 = 2131296264;
-			
-			// aapt resource value: 0x7f09000c
-			public const int pref_applabelfontsize = 2131296268;
-			
-			// aapt resource value: 0x7f09000a
-			public const int pref_blacklist = 2131296266;
-			
-			// aapt resource value: 0x7f090013
-			public const int pref_disablecheck = 2131296275;
-			
-			// aapt resource value: 0x7f090010
-			public const int pref_hidedate = 2131296272;
-			
-			// aapt resource value: 0x7f09000f
-			public const int pref_hidedivider = 2131296271;
-			
-			// aapt resource value: 0x7f09000d
-			public const int pref_hidelabels = 2131296269;
-			
-			// aapt resource value: 0x7f09000e
-			public const int pref_hidelogo = 2131296270;
-			
-			// aapt resource value: 0x7f090011
-			public const int pref_hidetime = 2131296273;
+			// aapt resource value: 0x7f090025
+			public const int imageViewLogo = 2131296293;
 			
 			// aapt resource value: 0x7f09000b
-			public const int pref_reorder = 2131296267;
+			public const int imageWallpaper = 2131296267;
 			
-			// aapt resource value: 0x7f090012
-			public const int pref_twentyfourhourtime = 2131296274;
+			// aapt resource value: 0x7f090010
+			public const int linearLayout1 = 2131296272;
+			
+			// aapt resource value: 0x7f090008
+			public const int loadingImage = 2131296264;
+			
+			// aapt resource value: 0x7f090006
+			public const int loadingProgressBar = 2131296262;
+			
+			// aapt resource value: 0x7f090009
+			public const int loadingProgressWheel = 2131296265;
+			
+			// aapt resource value: 0x7f090021
+			public const int pref_IconBackgroundAlpha = 2131296289;
+			
+			// aapt resource value: 0x7f090022
+			public const int pref_LabelBackgroundAlpha = 2131296290;
+			
+			// aapt resource value: 0x7f090020
+			public const int pref_TopInfoBarBackgroundAlpha = 2131296288;
+			
+			// aapt resource value: 0x7f090024
+			public const int pref_WallpaperUrl = 2131296292;
+			
+			// aapt resource value: 0x7f090023
+			public const int pref_WallpaperUse = 2131296291;
+			
+			// aapt resource value: 0x7f090019
+			public const int pref_applabelfontsize = 2131296281;
 			
 			// aapt resource value: 0x7f090017
-			public const int relativeLayout1 = 2131296279;
+			public const int pref_blacklist = 2131296279;
+			
+			// aapt resource value: 0x7f09001f
+			public const int pref_disablecheck = 2131296287;
+			
+			// aapt resource value: 0x7f09001c
+			public const int pref_hidedate = 2131296284;
+			
+			// aapt resource value: 0x7f09001a
+			public const int pref_hidelabels = 2131296282;
+			
+			// aapt resource value: 0x7f09001d
+			public const int pref_hidetime = 2131296285;
+			
+			// aapt resource value: 0x7f09001b
+			public const int pref_hidetopbar = 2131296283;
 			
 			// aapt resource value: 0x7f090018
-			public const int settingsmenu = 2131296280;
+			public const int pref_reorder = 2131296280;
 			
-			// aapt resource value: 0x7f090004
-			public const int textName = 2131296260;
+			// aapt resource value: 0x7f09001e
+			public const int pref_twentyfourhourtime = 2131296286;
+			
+			// aapt resource value: 0x7f090026
+			public const int relativeLayout1 = 2131296294;
+			
+			// aapt resource value: 0x7f090015
+			public const int seekBarPrefBarContainer = 2131296277;
+			
+			// aapt resource value: 0x7f090016
+			public const int seekBarPrefSeekBar = 2131296278;
+			
+			// aapt resource value: 0x7f090014
+			public const int seekBarPrefUnitsLeft = 2131296276;
+			
+			// aapt resource value: 0x7f090012
+			public const int seekBarPrefUnitsRight = 2131296274;
+			
+			// aapt resource value: 0x7f090013
+			public const int seekBarPrefValue = 2131296275;
+			
+			// aapt resource value: 0x7f090027
+			public const int settingsmenu = 2131296295;
+			
+			// aapt resource value: 0x7f090005
+			public const int textName = 2131296261;
 			
 			// aapt resource value: 0x7f090002
 			public const int textView = 2131296258;
 			
-			// aapt resource value: 0x7f090015
-			public const int textViewDate = 2131296277;
+			// aapt resource value: 0x7f09000e
+			public const int textViewDate = 2131296270;
 			
-			// aapt resource value: 0x7f090016
-			public const int textViewTime = 2131296278;
+			// aapt resource value: 0x7f090007
+			public const int textViewStatus = 2131296263;
+			
+			// aapt resource value: 0x7f09000f
+			public const int textViewTime = 2131296271;
 			
 			static Id()
 			{
@@ -562,19 +695,31 @@ namespace FiredTVLauncher
 			public const int GridItemLayout = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public const int Main = 2130903043;
+			public const int loading = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int ReorderItemLayout = 2130903044;
+			public const int loadingimage = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public const int ReorderLayout = 2130903045;
+			public const int loadingprogress = 2130903045;
 			
 			// aapt resource value: 0x7f030006
-			public const int Settings = 2130903046;
+			public const int Main = 2130903046;
 			
 			// aapt resource value: 0x7f030007
-			public const int TopBar = 2130903047;
+			public const int ReorderItemLayout = 2130903047;
+			
+			// aapt resource value: 0x7f030008
+			public const int ReorderLayout = 2130903048;
+			
+			// aapt resource value: 0x7f030009
+			public const int seek_bar_preference = 2130903049;
+			
+			// aapt resource value: 0x7f03000a
+			public const int Settings = 2130903050;
+			
+			// aapt resource value: 0x7f03000b
+			public const int TopBar = 2130903051;
 			
 			static Layout()
 			{
@@ -605,11 +750,14 @@ namespace FiredTVLauncher
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f060001
-			public const int app_name = 2131099649;
+			// aapt resource value: 0x7f040002
+			public const int app_name = 2130968578;
 			
-			// aapt resource value: 0x7f060000
-			public const int hello = 2131099648;
+			// aapt resource value: 0x7f040001
+			public const int hello = 2130968577;
+			
+			// aapt resource value: 0x7f040000
+			public const int library_name = 2130968576;
 			
 			static String()
 			{
@@ -672,6 +820,70 @@ namespace FiredTVLauncher
 			}
 			
 			private Style()
+			{
+			}
+		}
+		
+		public partial class Styleable
+		{
+			
+			public static int[] ProgressWheel = new int[]
+			{
+					2130771968,
+					2130771969,
+					2130771970,
+					2130771971,
+					2130771972,
+					2130771973,
+					2130771974,
+					2130771975,
+					2130771976,
+					2130771977,
+					2130771978,
+					2130771979};
+			
+			// aapt resource value: 3
+			public const int ProgressWheel_ahBarColor = 3;
+			
+			// aapt resource value: 11
+			public const int ProgressWheel_ahBarLength = 11;
+			
+			// aapt resource value: 10
+			public const int ProgressWheel_ahBarWidth = 10;
+			
+			// aapt resource value: 8
+			public const int ProgressWheel_ahCircleColor = 8;
+			
+			// aapt resource value: 7
+			public const int ProgressWheel_ahDelayMillis = 7;
+			
+			// aapt resource value: 9
+			public const int ProgressWheel_ahRadius = 9;
+			
+			// aapt resource value: 4
+			public const int ProgressWheel_ahRimColor = 4;
+			
+			// aapt resource value: 5
+			public const int ProgressWheel_ahRimWidth = 5;
+			
+			// aapt resource value: 6
+			public const int ProgressWheel_ahSpinSpeed = 6;
+			
+			// aapt resource value: 0
+			public const int ProgressWheel_ahText = 0;
+			
+			// aapt resource value: 1
+			public const int ProgressWheel_ahTextColor = 1;
+			
+			// aapt resource value: 2
+			public const int ProgressWheel_ahTextSize = 2;
+			
+			static Styleable()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Styleable()
 			{
 			}
 		}

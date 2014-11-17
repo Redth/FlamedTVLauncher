@@ -11,6 +11,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.Preferences;
+using System.Threading.Tasks;
+using AndroidHUD;
 
 namespace FiredTVLauncher
 {
@@ -19,16 +21,18 @@ namespace FiredTVLauncher
 	{
 		Preference prefBlacklist;
 		Preference prefReorder;
-
 		EditTextPreference prefAppNameFontSize;
 		CheckBoxPreference prefHideLabels;
-		CheckBoxPreference prefHideLogo;
-        CheckBoxPreference prefHideDividerLine;
+        CheckBoxPreference prefHideTopBar;
 		CheckBoxPreference prefHideDate;
 		CheckBoxPreference prefHideTime;
 		CheckBoxPreference prefTwentyFourHourTime;
 		CheckBoxPreference prefDisableHomeDetect;
-
+        EditTextPreference prefIconBackgroundAlpha;
+        EditTextPreference prefLabelBackgroundAlpha;
+        EditTextPreference prefTopInfoBarBackgroundAlpha;
+        CheckBoxPreference prefWallpaperUse;
+        EditTextPreference prefWallpaperUrl;
 
 		protected override void OnCreate (Bundle bundle)
 		{
@@ -41,12 +45,16 @@ namespace FiredTVLauncher
 			prefReorder = FindPreference ("pref_reorder");
 			prefHideLabels = (CheckBoxPreference)FindPreference ("pref_hidelabels");
 			prefAppNameFontSize = (EditTextPreference)FindPreference ("pref_applabelfontsize");
-			prefHideLogo = (CheckBoxPreference)FindPreference ("pref_hidelogo");
-            prefHideDividerLine = (CheckBoxPreference)FindPreference ("pref_hidedivider");
+			prefHideTopBar = (CheckBoxPreference)FindPreference ("pref_hidetopbar");
 			prefHideDate = (CheckBoxPreference)FindPreference ("pref_hidedate");
 			prefHideTime = (CheckBoxPreference)FindPreference ("pref_hidetime");
 			prefTwentyFourHourTime = (CheckBoxPreference)FindPreference ("pref_twentyfourhourtime");
 			prefDisableHomeDetect = (CheckBoxPreference)FindPreference ("pref_disablecheck");
+            prefIconBackgroundAlpha = (EditTextPreference)FindPreference ("pref_IconBackgroundAlpha");
+            prefLabelBackgroundAlpha = (EditTextPreference)FindPreference ("pref_LabelBackgroundAlpha");
+            prefTopInfoBarBackgroundAlpha = (EditTextPreference)FindPreference ("pref_TopInfoBarBackgroundAlpha");
+            prefWallpaperUse = (CheckBoxPreference)FindPreference ("pref_WallpaperUse");
+            prefWallpaperUrl = (EditTextPreference)FindPreference ("pref_WallpaperUrl");
 
 			prefAppNameFontSize.EditText.InputType = Android.Text.InputTypes.ClassNumber;
 
@@ -54,42 +62,29 @@ namespace FiredTVLauncher
 				StartActivity (typeof (SettingsAppShowHideActivity));
 			};
 			prefReorder.PreferenceClick += delegate {
-
                 StartActivity (typeof (ReorderActivity));
-//
-//				AlertDialog dlg = null;
-//				var bld = new AlertDialog.Builder(this);
-//
-//				bld.SetTitle ("Re-Order Apps");
-//				bld.SetMessage ("To re-order apps on the home screen, select the app you want to re-order, then long click the item.  This will put the app into re-order mode.  You can now move the app around until you are happy with its position, and select the item again once to exit re-order mode");
-//				bld.SetNegativeButton("OK", delegate {
-//					dlg.Dismiss();
-//				});
-//
-//				dlg = bld.Create();
-//				dlg.Show();
 			};
 
 			prefAppNameFontSize.PreferenceChange += SaveHandler;
-			prefHideLabels.PreferenceChange += SaveHandler;
-			prefHideLogo.PreferenceChange += SaveHandler;
-            prefHideDividerLine.PreferenceChange += SaveHandler;
+			prefHideLabels.PreferenceChange += SaveHandler;			
+            prefHideTopBar.PreferenceChange += SaveHandler;
 			prefHideDate.PreferenceChange += SaveHandler;
 			prefHideTime.PreferenceChange += SaveHandler;
 			prefTwentyFourHourTime.PreferenceChange += SaveHandler;
 			prefDisableHomeDetect.PreferenceChange += SaveHandler;
+            prefIconBackgroundAlpha.PreferenceChange += SaveHandler;
+            prefLabelBackgroundAlpha.PreferenceChange += SaveHandler;
+            prefTopInfoBarBackgroundAlpha.PreferenceChange += SaveHandler;
+            prefWallpaperUse.PreferenceChange += SaveHandler;
+            prefWallpaperUrl.PreferenceChange += SaveHandler;
 		}
-
-
+            
 		void SaveHandler (object sender, Preference.PreferenceChangeEventArgs e)
 		{
-
 			if (sender == prefHideLabels)
 				Settings.Instance.HideLabels = !prefHideLabels.Checked;
-			if (sender == prefHideLogo)
-				Settings.Instance.HideFiredTVLogo = !prefHideLogo.Checked;
-            if (sender == prefHideDividerLine)
-                Settings.Instance.HideHomeDividerLine = !prefHideDividerLine.Checked;
+            if (sender == prefHideTopBar)
+                Settings.Instance.HideTopBar = !prefHideTopBar.Checked;
 			if (sender == prefHideDate)
 				Settings.Instance.HideDate = !prefHideDate.Checked;
 			if (sender == prefTwentyFourHourTime)
@@ -109,9 +104,62 @@ namespace FiredTVLauncher
 				StartService (new Intent(this, typeof(ExcuseMeService)));
 			}
 
-			Settings.Save ();
+            if (sender == prefIconBackgroundAlpha)
+                Settings.Instance.IconBackgroundAlpha = ParseAlpha (prefIconBackgroundAlpha.EditText.Text);
 
+            if (sender == prefLabelBackgroundAlpha)
+                Settings.Instance.LabelBackgroundAlpha = ParseAlpha (prefLabelBackgroundAlpha.EditText.Text);
+
+            if (sender == prefTopInfoBarBackgroundAlpha)
+                Settings.Instance.TopInfoBarBackgroundAlpha = ParseAlpha (prefTopInfoBarBackgroundAlpha.EditText.Text);
+
+            if (sender == prefWallpaperUse)
+                Settings.Instance.WallpaperUse = prefWallpaperUse.Checked;
+
+            if (sender == prefWallpaperUrl) {
+
+                AndHUD.Shared.Show(this, "Downloading Wallpaper...");
+
+                var url = prefWallpaperUrl.EditText.Text;
+
+                Task.Factory.StartNew (() => {
+
+                    try {
+                        var http = new System.Net.WebClient ();
+                        var bytes = http.DownloadData (url);
+                        var filename = Settings.GetWallpaperFilename ();
+                        System.IO.File.WriteAllBytes (filename, bytes);
+
+                        Settings.Instance.WallpaperUrl = url;
+
+                        Settings.Save ();
+                    } catch (Exception ex) {
+
+                        Toast.MakeText (this, "Failed to Download Wallpaper", ToastLength.Long).Show ();
+                        Log.Error ("Downloading Wallpaper Failed", ex);
+                    }
+
+                    AndHUD.Shared.Dismiss (this);
+                });
+            }
+
+			Settings.Save ();
 		}
+
+        int ParseAlpha (string value)
+        {
+            var t = value;
+            int num = 120;
+
+            int.TryParse (t, out num);
+
+            if (num < 0)
+                num = 0;
+            if (num > 255)
+                num = 255;
+
+            return num;
+        }
 	}
 }
 

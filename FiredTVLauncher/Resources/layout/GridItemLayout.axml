@@ -5,16 +5,37 @@
     android:layout_height="140dp"
     android:gravity="center"
     android:background="?android:attr/activatedBackgroundIndicator">
-    <ImageView
-        android:src="@android:drawable/ic_menu_gallery"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:id="@+id/imageIcon" />
-    <TextView
-        android:text="App Name Here"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textName"
-        android:gravity="center" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="136dp"
+        android:layout_height="136dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:background="#b4000000"
+        android:id="@+id/iconBackground"
+        android:layout_margin="2dp">
+        <ImageView
+            android:src="@android:drawable/ic_menu_gallery"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/imageIcon"
+            android:padding="4dp"
+            android:layout_weight="1" />
+        <TextView
+            android:text="App Name"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textName"
+            android:gravity="center"
+            android:background="#c4000000"
+            android:padding="4dp"
+            android:layout_gravity="bottom"
+            android:fontFamily="sans-serif"
+            android:paddingTop="4dp"
+            android:paddingRight="4dp"
+            android:paddingBottom="6dp"
+            android:paddingLeft="4dp"
+            android:textStyle="bold" />
+    </LinearLayout>
 </LinearLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:firedtvlauncher="http://firedtvlauncher.com">
     <PreferenceCategory
         android:title="General">
         <Preference
@@ -24,17 +25,11 @@
             android:title="Hide App Labels"
             android:summary="Hide the App name label underneath its icon" />
         <CheckBoxPreference
-            android:id="@+id/pref_hidelogo"
+            android:id="@+id/pref_hidetopbar"
             android:defaultValue="false"
-            android:key="pref_hidelogo"
-            android:title="Hide FiredTV Logo"
-            android:summary="Hide the FiredTV Logo Image on the home screen" />
-        <CheckBoxPreference
-            android:id="@+id/pref_hidedivider"
-            android:defaultValue="false"
-            android:key="pref_hidedivider"
-            android:title="Hide Divider Line"
-            android:summary="Hide the Divider Line under the FiredTV Logo / Time on the home screen" />
+            android:key="pref_hidetopbar"
+            android:title="Hide Top Info Bar"
+            android:summary="Hide the Top Info Bar (with Date/Time) completely" />
         <CheckBoxPreference
             android:id="@+id/pref_hidedate"
             android:defaultValue="false"
@@ -59,5 +54,57 @@
             android:key="pref_disablecheck"
             android:title="Disable Home Button Detection"
             android:summary="Stop FiredTV from trying to detect when home is pressed and launching itself" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Look &amp; Feel">
+    <!--		<firedtvlauncher.SeekBarPreference 
+			android:key="pref_TopInfoBarBackgroundAlpha" 
+			android:id="@+id/pref_TopInfoBarBackgroundAlpha"
+			android:title="Top Info Bar Background Alpha" 
+			android:summary="Transparency of the background behind the top info bar" 
+			android:defaultValue="50" 
+			android:max="100" 
+			firedtvlauncher:min="0" />-->
+        <EditTextPreference
+            android:defaultValue="120"
+            android:dialogTitle="Top Info Bar Background Alpha"
+            android:inputType="number"
+            android:key="pref_TopInfoBarBackgroundAlpha"
+            android:id="@+id/pref_TopInfoBarBackgroundAlpha"
+            android:summary="Choose a number between 1 and 255 for the Alpha of the background behind the top info bar"
+            android:title="Top Info Bar Background Alpha" />
+        <EditTextPreference
+            android:defaultValue="120"
+            android:dialogTitle="Icon Background Alpha"
+            android:inputType="number"
+            android:key="pref_IconBackgroundAlpha"
+            android:id="@+id/pref_IconBackgroundAlpha"
+            android:summary="Choose a number between 1 and 255 for the Alpha of the background behind the app icons"
+            android:title="App Icon Background Alpha" />
+        <EditTextPreference
+            android:defaultValue="200"
+            android:dialogTitle="Label Background Alpha"
+            android:inputType="number"
+            android:key="pref_LabelBackgroundAlpha"
+            android:id="@+id/pref_LabelBackgroundAlpha"
+            android:summary="Choose a number between 1 and 255 for the Alpha of the background behind the app name label"
+            android:title="App Label Background Alpha" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Wallpaper">
+        <CheckBoxPreference
+            android:id="@+id/pref_WallpaperUse"
+            android:defaultValue="true"
+            android:key="pref_WallpaperUse"
+            android:title="Use a Custom Wallpaper"
+            android:summary="Use a Custom Wallpaper specified below" />
+        <EditTextPreference
+            android:defaultValue="Default"
+            android:dialogTitle="Enter the URL of a Custom Wallpaper"
+            android:inputType="textUri"
+            android:key="pref_WallpaperUrl"
+            android:id="@+id/pref_WallpaperUrl"
+            android:summary="Enter a URL to a custom wallpaper (.png or .jpg) to download and display"
+            android:title="Custom Wallpaper URL" />
     </PreferenceCategory>
 </PreferenceScreen>

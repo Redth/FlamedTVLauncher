@@ -38,11 +38,16 @@ namespace FiredTVLauncher
 			label.Text = app.Name;
 			label.TextSize = Settings.Instance.LabelFontSize;
 
-			if (Settings.Instance.HideLabels)
-				label.Visibility = ViewStates.Gone;
+            label.Visibility = Settings.Instance.HideLabels ? ViewStates.Gone : ViewStates.Visible;
 				
-			view.FindViewById<ImageView> (Resource.Id.imageIcon).SetImageDrawable (app.GetIcon (Context));
+            var imgView = view.FindViewById<ImageView> (Resource.Id.imageIcon);
+                
+            imgView.SetImageDrawable (app.GetIcon (Context));
 
+            var iconBg = view.FindViewById<LinearLayout> (Resource.Id.iconBackground);
+
+            iconBg.SetBackgroundColor (new Android.Graphics.Color (0, 0, 0, Settings.Instance.IconBackgroundAlpha));
+            label.SetBackgroundColor (new Android.Graphics.Color (0, 0, 0, Settings.Instance.LabelBackgroundAlpha));
 			return view;
 		}
 

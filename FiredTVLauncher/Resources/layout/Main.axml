@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:minWidth="25px"
@@ -9,38 +8,75 @@
         android:minWidth="25px"
         android:minHeight="25px"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/frameLayout1"
-        android:paddingTop="10dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp">
-        <include
-            layout="@layout/TopBar" />
+        android:layout_height="match_parent"
+        android:id="@+id/frameWallpaper">
+        <ImageView
+            android:id="@+id/imageWallpaper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/wallpaper"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:alpha="0.5" />
     </FrameLayout>
-    <View
-        android:id="@+id/dividerLine"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#ffba7102"
-        android:alpha="0.5" />
-    <GridView
-        android:listSelector="@drawable/apptheme_list_selector_holo_dark"
-        android:theme="@style/AppTheme"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:minWidth="25px"
-        android:minHeight="25px"
-        android:layout_width="match_parent"
+        android:minHeight="25px">
+        <GridView
+            android:listSelector="@drawable/apptheme_list_selector_holo_dark"
+            android:theme="@style/AppTheme"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/gridView"
+            android:layout_weight="1"
+            android:numColumns="auto_fit"
+            android:stretchMode="columnWidth"
+            android:columnWidth="140dp"
+            android:verticalSpacing="20dp"
+            android:horizontalSpacing="40dp"
+            android:clipToPadding="false"
+            android:scrollbarStyle="outsideOverlay"
+            android:paddingTop="60dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:paddingBottom="10dp" />
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/gridView"
-        android:layout_weight="1"
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth"
-        android:columnWidth="140dp"
-        android:verticalSpacing="20dp"
-        android:horizontalSpacing="40dp"
-        android:gravity="center"
-        android:padding="0dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="40dp" />
-</LinearLayout>
+        android:id="@+id/frameTopBar"
+        android:paddingTop="6dp"
+        android:paddingBottom="10dp"
+        android:background="#b2000000"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="right">
+            <TextView
+                android:text="MONDAY, JUNE 12"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/textViewDate"
+                android:paddingRight="20dp"
+                android:fontFamily="sans-serif-condensed" />
+            <TextView
+                android:text="9:00 AM"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/textViewTime"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>

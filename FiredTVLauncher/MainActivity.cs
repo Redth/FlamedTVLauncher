@@ -14,18 +14,18 @@ using System.Threading;
 namespace FiredTVLauncher
 {
 	[IntentFilter (new [] { Android.Content.Intent.ActionMain }, Categories=new [] { Android.Content.Intent.CategoryDefault, Android.Content.Intent.CategoryHome })]
-	[Activity (Label = "FiredTV")]
+    [Activity (Label = "FiredTV", ConfigurationChanges = ConfigChanges.Keyboard | ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
 	public class MainActivity : Activity
 	{
-
 		Timer timerUpdate;
 		AppsAdapter adapter;
 		GridView gridView;
 		TextView textDate;
 		TextView textTime;
-		ImageView imageLogo;
-        View dividerLine;
-		
+        FrameLayout frameTopBar;
+        ImageView wallpaper;
+        int gridViewTopPadding = 0;
+
         protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
@@ -38,17 +38,15 @@ namespace FiredTVLauncher
 
 			textDate = FindViewById<TextView> (Resource.Id.textViewDate);
 			textTime = FindViewById<TextView> (Resource.Id.textViewTime);
-			imageLogo = FindViewById<ImageView> (Resource.Id.imageViewLogo);
-            dividerLine = FindViewById<View> (Resource.Id.dividerLine);
-
-			imageLogo.SetImageResource (Resource.Drawable.firedtv);
-
 			gridView = FindViewById<GridView> (Resource.Id.gridView);
-		
+            frameTopBar = FindViewById<FrameLayout> (Resource.Id.frameTopBar);
+            wallpaper = FindViewById<ImageView> (Resource.Id.imageWallpaper);
 
 			StartService (new Intent (this, typeof(ExcuseMeService)));
 
 			adapter = new AppsAdapter () { Context = this };
+
+            gridViewTopPadding = gridView.PaddingTop;
 
 			gridView.ItemClick += (sender, e) => {
 
@@ -64,7 +62,7 @@ namespace FiredTVLauncher
 
 			gridView.Adapter = adapter;
 
-			timerUpdate = new Timer (state => Setup (), null, Timeout.Infinite, Timeout.Infinite);
+			timerUpdate = new Timer (state => Setup (true), null, Timeout.Infinite, Timeout.Infinite);
 
             RegisterForContextMenu (gridView);
 		}
@@ -85,12 +83,8 @@ namespace FiredTVLauncher
 
 			textDate.Visibility = Settings.Instance.HideDate ? ViewStates.Gone : ViewStates.Visible;
 			textTime.Visibility = Settings.Instance.HideTime ? ViewStates.Gone : ViewStates.Visible;
-			imageLogo.Visibility = Settings.Instance.HideFiredTVLogo ? ViewStates.Gone : ViewStates.Visible;
-            dividerLine.Visibility = Settings.Instance.HideHomeDividerLine ? ViewStates.Gone : ViewStates.Visible;
 
 			timerUpdate.Change (TimeSpan.FromSeconds (10), TimeSpan.FromSeconds (10));
-
-
 		}
 
 		protected override void OnPause ()
@@ -111,7 +105,6 @@ namespace FiredTVLauncher
         public override void OnCreateContextMenu (IContextMenu menu, View v, IContextMenuContextMenuInfo menuInfo)
         {
             base.OnCreateContextMenu (menu, v, menuInfo);
-
 
             menu.Add (0, 0, 0, "Hide App");
             menu.Add (0, 1, 1, "Uninstall App");
@@ -147,18 +140,46 @@ namespace FiredTVLauncher
 			return base.OnKeyDown (keyCode, e);
 		}
 			
-		void Setup()
+        void Setup(bool dateOnly = false)
 		{
 			RunOnUiThread (() => {
+
 				var timeFmt = "h:mm tt";
 				if (Settings.Instance.TwentyFourHourTime)
 					timeFmt = "H:mm";
 				textTime.Text = DateTime.Now.ToString (timeFmt);
-				textDate.Text = DateTime.Now.ToString ("dddd MMMM d");
+                textDate.Text = DateTime.Now.ToString ("dddd MMMM d").ToUpperInvariant ();
+
+                if (dateOnly)
+                    return;
+
+                frameTopBar.Visibility = Settings.Instance.HideTopBar ? ViewStates.Gone : ViewStates.Visible;
+
+                frameTopBar.SetBackgroundColor (new Android.Graphics.Color (0,0,0, Settings.Instance.TopInfoBarBackgroundAlpha));
+
+                var pad = Settings.Instance.HideTopBar ? gridView.PaddingBottom : gridViewTopPadding;
+
+                gridView.SetPadding (gridView.PaddingLeft, pad, gridView.PaddingRight, gridView.PaddingBottom);
+
+                wallpaper.Visibility = Settings.Instance.WallpaperUse ? ViewStates.Visible : ViewStates.Gone;
+
+                if (Settings.Instance.WallpaperUse) {
+                
+                    var filename = Settings.GetWallpaperFilename ();
+
+                    if (System.IO.File.Exists (filename)) {
+                        try {
+                            var drawable = Android.Graphics.Drawables.Drawable.CreateFromPath (filename);
+                            wallpaper.SetImageDrawable (drawable);
+                        } catch {
+                            wallpaper.SetImageResource (Resource.Drawable.wallpaper);
+                        }
+                    } else {
+                        wallpaper.SetImageResource (Resource.Drawable.wallpaper);
+                    }                     
+                }
+
 			});
 		}
-
 	}
 }
-
-

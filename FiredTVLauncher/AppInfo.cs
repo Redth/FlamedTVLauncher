@@ -11,6 +11,7 @@ using Android.Content.PM;
 using Android.Content.Res;
 using System.Threading.Tasks;
 using Android.Graphics.Drawables;
+using Android.Util;
 
 namespace FiredTVLauncher
 {
@@ -32,15 +33,34 @@ namespace FiredTVLauncher
 		{
 			Drawable icon = null;
 
-			if (App != null) {
-				icon = App.LoadIcon (context.PackageManager);
-			} else {
-				if (Name == "Settings")
-					icon = context.Resources.GetDrawable (Resource.Drawable.settings);
-			}
+            var metrics = new [] {
+                DisplayMetricsDensity.Xxxhigh,
+                DisplayMetricsDensity.Xxhigh,
+                DisplayMetricsDensity.Xhigh,
+                DisplayMetricsDensity.Tv
+            };
+
+            if (App != null) {
+
+                foreach (var m in metrics) {
+                    try {
+                        var pkgContext = context.CreatePackageContext (App.PackageName, PackageContextFlags.IgnoreSecurity);
+                        icon = pkgContext.Resources.GetDrawableForDensity (App.Icon, (int)m);
+                        break;
+                    } catch {
+                        continue;
+                    }
+                }
+            } else {
+                if (Name == "Settings")
+                    icon = context.Resources.GetDrawable (Resource.Drawable.settings);
+
+            }
 
 			return icon;
 		}
+
+
 
 		public static void FetchApps (Context context, bool ignoreBlacklist, Action<List<AppInfo>> callback)
 		{

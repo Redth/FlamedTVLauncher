@@ -4,3 +4,5 @@ obj
 *.DS_Store
 *.keystore
 *.apk
+Components/
+packages/
