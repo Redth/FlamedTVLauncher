@@ -5,15 +5,15 @@
 
   <style name="AutoCompleteTextViewAppTheme" parent="android:Widget.Holo.AutoCompleteTextView">
       <item name="android:dropDownSelector">@drawable/apptheme_list_selector_holo_dark</item>
-	    <item name="android:background">@drawable/apptheme_edit_text_holo_dark</item>
+        <item name="android:background">@drawable/apptheme_edit_text_holo_dark</item>
   </style>
 
   <style name="ButtonAppTheme" parent="android:Widget.Holo.Button">
-	  <item name="android:background">@drawable/apptheme_btn_default_holo_dark</item>
+      <item name="android:background">@drawable/apptheme_btn_default_holo_dark</item>
   </style>
 
   <style name="ImageButtonAppTheme" parent="android:Widget.Holo.ImageButton">
-	  <item name="android:background">@drawable/apptheme_btn_default_holo_dark</item>
+      <item name="android:background">@drawable/apptheme_btn_default_holo_dark</item>
   </style>
 
   <style name="SpinnerAppTheme" parent="android:Widget.Holo.Spinner">
@@ -32,7 +32,7 @@
   </style>
 
   <style name="TabTextAppTheme">
-	  <item name="android:textColor">#ffffff</item>
+      <item name="android:textColor">#ffffff</item>
       <item name="android:textSize">12sp</item>
       <item name="android:textStyle">bold</item>
       <!-- v14 <item name="android:textAllCaps">true</item> -->

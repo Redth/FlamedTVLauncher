@@ -57,14 +57,14 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:title="Look &amp; Feel">
-    <!--		<firedtvlauncher.SeekBarPreference 
-			android:key="pref_TopInfoBarBackgroundAlpha" 
-			android:id="@+id/pref_TopInfoBarBackgroundAlpha"
-			android:title="Top Info Bar Background Alpha" 
-			android:summary="Transparency of the background behind the top info bar" 
-			android:defaultValue="50" 
-			android:max="100" 
-			firedtvlauncher:min="0" />-->
+    <!--        <firedtvlauncher.SeekBarPreference 
+            android:key="pref_TopInfoBarBackgroundAlpha" 
+            android:id="@+id/pref_TopInfoBarBackgroundAlpha"
+            android:title="Top Info Bar Background Alpha" 
+            android:summary="Transparency of the background behind the top info bar" 
+            android:defaultValue="50" 
+            android:max="100" 
+            firedtvlauncher:min="0" />-->
         <EditTextPreference
             android:defaultValue="120"
             android:dialogTitle="Top Info Bar Background Alpha"
