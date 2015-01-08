@@ -25,6 +25,7 @@ namespace FiredTVLauncher
         FrameLayout frameTopBar;
         ImageView wallpaper;
         int gridViewTopPadding = 0;
+        string wallpaperFile = string.Empty;
 
         protected override void OnCreate (Bundle bundle)
 		{
@@ -167,15 +168,26 @@ namespace FiredTVLauncher
                 
                     var filename = Settings.GetWallpaperFilename ();
 
-                    if (System.IO.File.Exists (filename)) {
-                        try {
-                            var drawable = Android.Graphics.Drawables.Drawable.CreateFromPath (filename);
-                            wallpaper.SetImageDrawable (drawable);
-                        } catch {
-                            wallpaper.SetImageResource (Resource.Drawable.wallpaper);
+                    if (!System.IO.File.Exists (filename)) {
+                        filename = string.Empty;
+                        wallpaperFile = string.Empty;
+                    }
+
+                    if (wallpaperFile != filename) {
+                        wallpaperFile = filename;
+
+                        if (string.IsNullOrEmpty (wallpaperFile)) {
+                            wallpaper.SetImageResource (Settings.UseLargeTextures () ? Resource.Drawable.wallpaper : Resource.Drawable.wallpaper);
                         }
-                    } else {
-                        wallpaper.SetImageResource (Resource.Drawable.wallpaper);
+                        else {
+                            try {
+                                var drawable = Android.Graphics.Drawables.Drawable.CreateFromPath (filename);
+                                wallpaper.SetImageDrawable (drawable);
+                            } catch {
+                                wallpaperFile = string.Empty;
+                                wallpaper.SetImageResource (Settings.UseLargeTextures () ? Resource.Drawable.wallpaper : Resource.Drawable.wallpaper);
+                            }
+                        }
                     }                     
                 }
 
