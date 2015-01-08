@@ -9,6 +9,7 @@ using Android.OS;
 using System.Collections.Generic;
 using Android.Content.PM;
 using Android.Content.Res;
+using Launchers.Common;
 
 namespace FiredTVLauncher
 {
@@ -42,7 +43,7 @@ namespace FiredTVLauncher
 				
             var imgView = view.FindViewById<ImageView> (Resource.Id.imageIcon);
                 
-            imgView.SetImageDrawable (app.GetIcon (Context));
+            imgView.SetImageDrawable (app.GetIcon (Context, null));
 
             var iconBg = view.FindViewById<LinearLayout> (Resource.Id.iconBackground);
 
@@ -60,7 +61,8 @@ namespace FiredTVLauncher
 
 		public void Reload () 
 		{
-			AppInfo.FetchApps (Context, false, r => {
+
+            AppInfo.FetchApps (Context, Settings.Instance.Blacklist, true, r => {
 
 				Apps.Clear ();
 				Apps.AddRange (r);

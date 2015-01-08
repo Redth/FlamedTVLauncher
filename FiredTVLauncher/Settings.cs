@@ -12,6 +12,7 @@ using Android.Views;
 using Android.Widget;
 using System.Runtime.Serialization.Json;
 using System.IO;
+using Launchers.Common;
 
 namespace FiredTVLauncher
 {
@@ -39,7 +40,9 @@ namespace FiredTVLauncher
 				Blacklist.Add ("com.amazon.bueller.photos");
 				Blacklist.Add ("com.amazon.device.bluetoothdfu");
 				Blacklist.Add ("com.amazon.device.gmo");
-				Blacklist.Add ("com.amazon.venezia");				
+				Blacklist.Add ("com.amazon.venezia");	
+                Blacklist.Add ("com.amazon.storm.lightning.tutorial");
+                Blacklist.Add ("com.broadcom.wfd.client");
 			}
 
 			HideLabels = false;
@@ -191,7 +194,13 @@ namespace FiredTVLauncher
 			var model = Build.Model;
 
 			return manu.Equals ("Amazon") && model.StartsWith ("AFT", StringComparison.InvariantCultureIgnoreCase);
-		}
+		}            
+
+        public static bool UseLargeTextures () 
+        {
+            var c = new Android.Graphics.Canvas ();
+            return c.MaximumBitmapWidth > 2048;
+        }
 	}
 }
 

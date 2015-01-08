@@ -10,6 +10,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Launchers.Common;
 
 namespace FiredTVLauncher
 {
@@ -79,7 +80,7 @@ namespace FiredTVLauncher
 
 		public void Reload ()
 		{
-			AppInfo.FetchApps (Context, true, r => {
+            AppInfo.FetchApps (Context, null, true, r => {
 
 				apps.Clear ();
 				apps.AddRange (r);
