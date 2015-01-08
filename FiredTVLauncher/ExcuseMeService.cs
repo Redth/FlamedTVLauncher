@@ -10,77 +10,90 @@ using System.Linq;
 namespace FiredTVLauncher
 {
 	[Service]
-	public class ExcuseMeService : IntentService
+	public class ExcuseMeService : Service
 	{
 		public ExcuseMeService ()
 		{
 		}
 
-		Timer timer;
-		bool didAct = false;
+        Timer timer;
 
-		public static bool AllowFireTVHome = false;
-		ActivityManager activityManager;
+        DateTime acted = DateTime.MinValue;
 
-		protected override void OnHandleIntent (Intent intent)
-		{
-			if (Settings.Instance.DisableHomeDetection) {
-				Console.WriteLine ("Disabled Home Detection... Not starting KFTV Watcher Service...");
-				return;
-			}
+        public static bool AllowFireTVHome = false;
+        ActivityManager activityManager;
 
-			if (!Settings.IsFireTV ()) {
-				Console.WriteLine ("Not starting KFTV Watcher Service, not FireTV...");
-				return;
-			}
+        public override void OnCreate ()
+        {
+            Console.WriteLine ("ExcuseMe Service Created");
+        }
 
-			if (timer == null) {
-				activityManager = ActivityManager.FromContext (this);
+        public override void OnDestroy ()
+        {
+            Console.WriteLine ("ExcuseMe Service Destroyed");
+        }
 
-				timer = new Timer (state => {
-				
-					if (Settings.Instance.DisableHomeDetection) {
-						timer.Change (Timeout.Infinite, Timeout.Infinite);
-						timer = null;
-						return;
-					}
+        public override Android.OS.IBinder OnBind (Intent intent)
+        {
+            return default(Android.OS.IBinder);
+        }
 
-					// Gets the topmost running task
-					var topTask = activityManager.GetRunningTasks (1).FirstOrDefault ();
+        public override StartCommandResult OnStartCommand (Intent intent, StartCommandFlags flags, int startId)
+        {
+            if (!Settings.IsFireTV ()) {
+                Console.WriteLine ("Not starting KFTV Watcher Service, not FireTV...");
+                return StartCommandResult.NotSticky;
+            }
 
-					if (topTask == null || topTask.TopActivity == null)
-						return;
+            if (timer == null) {
+                activityManager = ActivityManager.FromContext (this);
 
-					// We can detect that the firetv home launcher was called
-					// by simply getting the top task's top activity and matching the 
-					// package name and class name
-					//		Package Name: com.amazon.tv.launcher
-					//		Class Name:   com.amazon.tv.launcher.ui.HomeActivity
-					if (topTask.TopActivity.PackageName == Settings.HOME_PACKAGE_NAME
-						&& topTask.TopActivity.ClassName == Settings.HOME_CLASS_NAME) {
+                timer = new Timer (state => {
 
-						// Just to be safe, we don't want to call this multiple times in a row
-						// Also there's a static flag that the firedtv app can set
-						// to allow the user to launch the firetv homescreen
-						if (!didAct && !AllowFireTVHome) {
+                    if (Settings.Instance.DisableHomeDetection) {
+                        Console.WriteLine ("Disabled Home Detection... Not starting KFTV Watcher Service...");
+                        return;
+                    }
+                     
+                    // Gets the topmost running task
+                    var topTask = activityManager.GetRunningTasks (1).FirstOrDefault ();
 
-							//Come back to papa
-							var actIntent = new Intent(ApplicationContext, typeof(MainActivity));
-							actIntent.AddFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop);
-							StartActivity (actIntent);
+                    if (topTask == null || topTask.TopActivity == null)
+                        return;
 
-							// Set the flag
-							didAct = true;
-						}
+                    // We can detect that the firetv home launcher was called
+                    // by simply getting the top task's top activity and matching the 
+                    // package name and class name
+                    //      Package Name: com.amazon.tv.launcher
+                    //      Class Name:   com.amazon.tv.launcher.ui.HomeActivity
+                    if (topTask.TopActivity.PackageName == Settings.HOME_PACKAGE_NAME
+                        && topTask.TopActivity.ClassName == Settings.HOME_CLASS_NAME) {
 
-					} else {
-						// It wasn't a match (another task is top) so reset the flag
-						didAct = false;
-					}
+                        var actedAgo = DateTime.UtcNow - acted;
+                        // Just to be safe, we don't want to call this multiple times in a row
+                        // Also there's a static flag that the firedtv app can set
+                        // to allow the user to launch the firetv homescreen
+                        if (actedAgo > TimeSpan.FromMilliseconds (500) && !AllowFireTVHome) {
 
-				}, null, Settings.Instance.HomeDetectIntervalMs, Settings.Instance.HomeDetectIntervalMs);
-			}
-		}
+                            //Come back to papa
+                            var actIntent = new Intent(ApplicationContext, typeof(MainActivity));
+                            actIntent.AddFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop);
+                            StartActivity (actIntent);
+
+                            // Set the flag
+                            acted = DateTime.UtcNow;
+                        }
+
+                    } else {
+                        // It wasn't a match (another task is top) so reset the flag
+                        acted = DateTime.MinValue;
+                    }
+
+                }, null, Settings.Instance.HomeDetectIntervalMs, Settings.Instance.HomeDetectIntervalMs);
+            }
+        
+            return StartCommandResult.Sticky;
+        }
 	}
 }
 
