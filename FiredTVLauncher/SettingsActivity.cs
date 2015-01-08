@@ -77,6 +77,8 @@ namespace FiredTVLauncher
             prefTopInfoBarBackgroundAlpha.PreferenceChange += SaveHandler;
             prefWallpaperUse.PreferenceChange += SaveHandler;
             prefWallpaperUrl.PreferenceChange += SaveHandler;
+
+            prefDisableHomeDetect.Checked = Settings.Instance.DisableHomeDetection;
 		}
             
 		void SaveHandler (object sender, Preference.PreferenceChangeEventArgs e)
