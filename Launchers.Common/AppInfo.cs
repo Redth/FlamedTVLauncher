@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using Android.Graphics.Drawables;
 using Android.Util;
 
-namespace FiredTVLauncher
+namespace Launchers.Common
 {
 
 	public class AppInfo : Java.Lang.Object
@@ -29,11 +29,14 @@ namespace FiredTVLauncher
 
 		public string PackageName { get; set; }
 
-		public Drawable GetIcon (Context context)
+        public Drawable GetIcon (Context context, Dictionary<string, int> overrideIcons = null)
 		{
-			Drawable icon = null;
+            if (overrideIcons == null)
+                overrideIcons = new Dictionary<string, int> ();
 
-            var metrics = new [] {
+			Drawable icon = null;
+           
+            var metrics = new List<DisplayMetricsDensity> {
                 DisplayMetricsDensity.Xxxhigh,
                 DisplayMetricsDensity.Xxhigh,
                 DisplayMetricsDensity.Xhigh,
@@ -52,9 +55,8 @@ namespace FiredTVLauncher
                     }
                 }
             } else {
-                if (Name == "Settings")
-                    icon = context.Resources.GetDrawable (Resource.Drawable.settings);
-
+                if (overrideIcons.ContainsKey ("Settings"))
+                    icon = context.Resources.GetDrawable (overrideIcons ["Settings"]);
             }
 
 			return icon;
@@ -62,18 +64,23 @@ namespace FiredTVLauncher
 
 
 
-		public static void FetchApps (Context context, bool ignoreBlacklist, Action<List<AppInfo>> callback)
+        public static void FetchApps (Context context, List<string> ignoredPackageNames, bool addSettings, Action<List<AppInfo>> callback)
 		{
 			Task.Factory.StartNew (() => {
 
-				var apps = FetchApps (context, ignoreBlacklist);
+				var apps = FetchApps (context, addSettings, ignoredPackageNames);
 
 				callback (apps);
 			});
 		}
 
-		static List<AppInfo> FetchApps (Context context, bool ignoreBlacklist = false)
+        static List<AppInfo> FetchApps (Context context, bool addSettings = false, List<string> ignoredPackageNames = null, Dictionary<string, string> renameMappings = null)
 		{
+            if (renameMappings == null)
+                renameMappings = new Dictionary<string, string> ();
+            if (ignoredPackageNames == null)
+                ignoredPackageNames = new List<string> ();
+
 			var results = new List<AppInfo> ();
 			var apps = context.PackageManager.GetInstalledApplications (PackageInfoFlags.Activities);
 
@@ -81,18 +88,15 @@ namespace FiredTVLauncher
 
 				var launchIntent = context.PackageManager.GetLaunchIntentForPackage (app.PackageName);
 
-				if (app.PackageName == Android.Provider.Settings.ActionSettings)
-					Console.WriteLine ("Settings");
-
 				if (launchIntent != null) {
 
-					if (!ignoreBlacklist && Settings.Instance.Blacklist.Contains (app.PackageName))
+					if (ignoredPackageNames.Contains (app.PackageName))
 						continue;
-
+                        
 					var label = app.LoadLabel (context.PackageManager);
-					if (app.PackageName == Settings.HOME_PACKAGE_NAME)
-						label = "FireTV";
-
+                    if (renameMappings.ContainsKey (context.PackageName))
+                        label = renameMappings [context.PackageName];
+					
 					results.Add (new AppInfo {
 						LaunchIntent = launchIntent,
 						Name = label,
@@ -102,7 +106,7 @@ namespace FiredTVLauncher
 				}
 			}
 
-			if (!Settings.Instance.Blacklist.Contains (Android.Provider.Settings.ActionSettings) || ignoreBlacklist) {
+			if (!ignoredPackageNames.Contains (Android.Provider.Settings.ActionSettings) && addSettings) {
 				results.Add (new AppInfo {
 					LaunchIntent = new Intent (Android.Provider.Settings.ActionSettings),
 					Name = "Settings",

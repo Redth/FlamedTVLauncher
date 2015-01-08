@@ -3,18 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FiredTVLauncher", "FiredTVLauncher\FiredTVLauncher.csproj", "{EBB26210-D4C3-4497-A0DC-5814E634690A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launchers.Common", "Launchers.Common\Launchers.Common.csproj", "{197B6A4D-204B-43D5-A732-845AD8D30BF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{197B6A4D-204B-43D5-A732-845AD8D30BF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{197B6A4D-204B-43D5-A732-845AD8D30BF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{197B6A4D-204B-43D5-A732-845AD8D30BF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{197B6A4D-204B-43D5-A732-845AD8D30BF5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EBB26210-D4C3-4497-A0DC-5814E634690A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EBB26210-D4C3-4497-A0DC-5814E634690A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBB26210-D4C3-4497-A0DC-5814E634690A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBB26210-D4C3-4497-A0DC-5814E634690A}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = FiredTVLauncher\FiredTVLauncher.csproj
 	EndGlobalSection
 EndGlobal
