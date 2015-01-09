@@ -26,6 +26,7 @@ namespace FiredTVLauncher
         ImageView wallpaper;
         int gridViewTopPadding = 0;
         string wallpaperFile = string.Empty;
+        bool firstWallpaperLoad = true;
 
         protected override void OnCreate (Bundle bundle)
 		{
@@ -80,7 +81,11 @@ namespace FiredTVLauncher
 			// that we've resumed our launcher
 			ExcuseMeService.AllowFireTVHome = false;
 
+            AndroidHUD.AndHUD.Shared.Show (this, "Loading...");
+
 			adapter.Reload ();
+
+            AndroidHUD.AndHUD.Shared.Dismiss (this);
 
 			textDate.Visibility = Settings.Instance.HideDate ? ViewStates.Gone : ViewStates.Visible;
 			textTime.Visibility = Settings.Instance.HideTime ? ViewStates.Gone : ViewStates.Visible;
@@ -168,27 +173,17 @@ namespace FiredTVLauncher
                 
                     var filename = Settings.GetWallpaperFilename ();
 
-                    if (!System.IO.File.Exists (filename)) {
-                        filename = string.Empty;
-                        wallpaperFile = string.Empty;
+                    if (string.IsNullOrEmpty (filename)) {
+                        wallpaper.SetImageResource (Resource.Drawable.wallpaper);
                     }
-
-                    if (wallpaperFile != filename) {
-                        wallpaperFile = filename;
-
-                        if (string.IsNullOrEmpty (wallpaperFile)) {
-                            wallpaper.SetImageResource (Settings.UseLargeTextures () ? Resource.Drawable.wallpaper : Resource.Drawable.wallpaper);
+                    else {
+                        try {
+                            var drawable = Android.Graphics.Drawables.Drawable.CreateFromPath (filename);
+                            wallpaper.SetImageDrawable (drawable);
+                        } catch {
+                            wallpaper.SetImageResource (Resource.Drawable.wallpaper);
                         }
-                        else {
-                            try {
-                                var drawable = Android.Graphics.Drawables.Drawable.CreateFromPath (filename);
-                                wallpaper.SetImageDrawable (drawable);
-                            } catch {
-                                wallpaperFile = string.Empty;
-                                wallpaper.SetImageResource (Settings.UseLargeTextures () ? Resource.Drawable.wallpaper : Resource.Drawable.wallpaper);
-                            }
-                        }
-                    }                     
+                    }
                 }
 
 			});
