@@ -508,6 +508,11 @@
     <AndroidResource Include="Resources\layout\ReorderLayout.axml" />
     <AndroidResource Include="Resources\drawable\wallpaper.png" />
     <AndroidResource Include="Resources\layout\seek_bar_preference.xml" />
+    <AndroidResource Include="Resources\drawable\firetvicon.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\wallpaper.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\wallpaper.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\wallpaper.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\wallpaper.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>

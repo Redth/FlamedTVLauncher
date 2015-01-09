@@ -128,7 +128,7 @@ namespace FiredTVLauncher
                         LayoutInflater.FromContext (Context).Inflate (Resource.Layout.ReorderItemLayout, parent, false);
             
             view.FindViewById<TextView> (Resource.Id.textName).Text = app.Name;
-            view.FindViewById<ImageView> (Resource.Id.imageIcon).SetImageDrawable (app.GetIcon (Context));
+            view.FindViewById<ImageView> (Resource.Id.imageIcon).SetImageDrawable (app.GetIcon (Context, Settings.ICON_OVERRIDES));
 
 //            view.FindViewById<ImageButton> (Resource.Id.buttonUp).Click += (sender, e) => {
 //                Console.WriteLine ("UP");
@@ -173,7 +173,7 @@ namespace FiredTVLauncher
 
         public void Reload () 
         {
-            AppInfo.FetchApps (Context, Settings.Instance.Blacklist, true, r => {
+            AppInfo.FetchApps (Context, Settings.Instance.Blacklist, true, Settings.RENAME_MAPPINGS, r => {
 
                 Apps.Clear ();
                 Apps.AddRange (r);

@@ -21,6 +21,15 @@ namespace FiredTVLauncher
 		public const string HOME_PACKAGE_NAME = "com.amazon.tv.launcher";
 		public const string HOME_CLASS_NAME = "com.amazon.tv.launcher.ui.HomeActivity";
 
+        public static readonly Dictionary<string, int> ICON_OVERRIDES = new Dictionary<string, int> {
+            { Android.Provider.Settings.ActionSettings, Resource.Drawable.settings },
+            { Settings.HOME_PACKAGE_NAME, Resource.Drawable.firetvicon },           
+        };
+
+        public static readonly Dictionary<string, string> RENAME_MAPPINGS = new Dictionary<string, string> {
+            { Settings.HOME_PACKAGE_NAME, "FireTV Home" }
+        };
+
 		static Settings()
 		{
 			Instance = new Settings ();
@@ -33,17 +42,6 @@ namespace FiredTVLauncher
 
 			Blacklist = new List<string> ();
 			Ordering = new List<AppOrder> ();
-
-			if (Blacklist.Count <= 0) {
-				Blacklist.Add ("com.altusapps.firedtvlauncher");
-				Blacklist.Add ("com.amazon.avod");
-				Blacklist.Add ("com.amazon.bueller.photos");
-				Blacklist.Add ("com.amazon.device.bluetoothdfu");
-				Blacklist.Add ("com.amazon.device.gmo");
-				Blacklist.Add ("com.amazon.venezia");	
-                Blacklist.Add ("com.amazon.storm.lightning.tutorial");
-                Blacklist.Add ("com.broadcom.wfd.client");
-			}
 
 			HideLabels = false;
 			LabelFontSize = 18;
@@ -85,9 +83,16 @@ namespace FiredTVLauncher
 
         public static string GetWallpaperFilename() 
         {
-            var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
-            var filename = System.IO.Path.Combine(path, "wallpaper.png");
-            return filename;
+            try {
+                var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+                var filename = System.IO.Path.Combine(path, "wallpaper.png");
+
+                if (File.Exists (filename))
+                    return filename;
+            } catch {
+            }
+
+            return null;
         }
 
 
@@ -185,6 +190,17 @@ namespace FiredTVLauncher
             catch (Exception ex) {
                 Log.Error ("Failed to load settings file", ex);
                 Settings.Instance = new Settings ();
+
+                if (Settings.Instance.Blacklist.Count <= 0) {
+                    Settings.Instance.Blacklist.Add ("com.altusapps.firedtvlauncher");
+                    Settings.Instance.Blacklist.Add ("com.amazon.avod");
+                    Settings.Instance.Blacklist.Add ("com.amazon.bueller.photos");
+                    Settings.Instance.Blacklist.Add ("com.amazon.device.bluetoothdfu");
+                    Settings.Instance.Blacklist.Add ("com.amazon.device.gmo");
+                    Settings.Instance.Blacklist.Add ("com.amazon.venezia");   
+                    Settings.Instance.Blacklist.Add ("com.amazon.storm.lightning.tutorial");
+                    Settings.Instance.Blacklist.Add ("com.broadcom.wfd.client");
+                }
             }
 		}
 

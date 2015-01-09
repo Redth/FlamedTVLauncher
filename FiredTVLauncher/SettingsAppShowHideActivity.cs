@@ -48,7 +48,11 @@ namespace FiredTVLauncher
 		{
 			base.OnResume ();
 
+            AndroidHUD.AndHUD.Shared.Show (this, "Loading Apps...");
+
 			adapter.Reload ();
+
+            AndroidHUD.AndHUD.Shared.Dismiss (this);
 		}
 	}
 
@@ -69,7 +73,7 @@ namespace FiredTVLauncher
 			           LayoutInflater.FromContext (this.Context).Inflate (Resource.Layout.AppShowHideItem, parent, false);
 
 			view.FindViewById<TextView> (Resource.Id.textView).Text = app.Name;
-			var icon = app.GetIcon (Context);
+            var icon = app.GetIcon (Context, Settings.ICON_OVERRIDES);
 			if (icon != null)
 				view.FindViewById<ImageView> (Resource.Id.imageView).SetImageDrawable (icon);
 
@@ -80,7 +84,7 @@ namespace FiredTVLauncher
 
 		public void Reload ()
 		{
-            AppInfo.FetchApps (Context, null, true, r => {
+            AppInfo.FetchApps (Context, null, true, Settings.RENAME_MAPPINGS, r => {
 
 				apps.Clear ();
 				apps.AddRange (r);

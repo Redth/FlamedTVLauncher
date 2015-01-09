@@ -29,6 +29,7 @@ namespace FiredTVLauncher
 		public override int Count { get { return Apps.Count; } }
 		public override AppInfo this [int index] { get { return Apps [index]; } }
 
+
 		public override View GetView (int position, View convertView, ViewGroup parent)
 		{
 			var app = Apps [position];
@@ -43,7 +44,7 @@ namespace FiredTVLauncher
 				
             var imgView = view.FindViewById<ImageView> (Resource.Id.imageIcon);
                 
-            imgView.SetImageDrawable (app.GetIcon (Context, null));
+            imgView.SetImageDrawable (app.GetIcon (Context, Settings.ICON_OVERRIDES));
 
             var iconBg = view.FindViewById<LinearLayout> (Resource.Id.iconBackground);
 
@@ -62,7 +63,7 @@ namespace FiredTVLauncher
 		public void Reload () 
 		{
 
-            AppInfo.FetchApps (Context, Settings.Instance.Blacklist, true, r => {
+            AppInfo.FetchApps (Context, Settings.Instance.Blacklist, true, Settings.RENAME_MAPPINGS, r => {
 
 				Apps.Clear ();
 				Apps.AddRange (r);

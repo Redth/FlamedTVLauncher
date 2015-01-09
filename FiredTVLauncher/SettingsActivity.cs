@@ -38,6 +38,8 @@ namespace FiredTVLauncher
 		{
 			base.OnCreate (bundle);
 
+            Settings.Load ();
+
 			// Create your application here
 			AddPreferencesFromResource (Resource.Layout.Settings);
 
@@ -78,7 +80,18 @@ namespace FiredTVLauncher
             prefWallpaperUse.PreferenceChange += SaveHandler;
             prefWallpaperUrl.PreferenceChange += SaveHandler;
 
+            prefAppNameFontSize.EditText.Text = Settings.Instance.LabelFontSize.ToString ();
+            prefHideLabels.Checked = Settings.Instance.HideLabels;
+            prefHideTopBar.Checked = Settings.Instance.HideTopBar;
+            prefHideDate.Checked = Settings.Instance.HideDate;
+            prefHideTime.Checked = Settings.Instance.HideTime;
+            prefTwentyFourHourTime.Checked = Settings.Instance.TwentyFourHourTime;
             prefDisableHomeDetect.Checked = Settings.Instance.DisableHomeDetection;
+            prefIconBackgroundAlpha.EditText.Text = Settings.Instance.IconBackgroundAlpha.ToString ();
+            prefLabelBackgroundAlpha.EditText.Text = Settings.Instance.LabelBackgroundAlpha.ToString ();
+            prefTopInfoBarBackgroundAlpha.EditText.Text = Settings.Instance.TopInfoBarBackgroundAlpha.ToString ();
+            prefWallpaperUse.Checked = Settings.Instance.WallpaperUse;
+
 		}
             
 		void SaveHandler (object sender, Preference.PreferenceChangeEventArgs e)
@@ -116,7 +129,7 @@ namespace FiredTVLauncher
                 Settings.Instance.TopInfoBarBackgroundAlpha = ParseAlpha (prefTopInfoBarBackgroundAlpha.EditText.Text);
 
             if (sender == prefWallpaperUse)
-                Settings.Instance.WallpaperUse = prefWallpaperUse.Checked;
+                Settings.Instance.WallpaperUse = !prefWallpaperUse.Checked;
 
             if (sender == prefWallpaperUrl) {
 

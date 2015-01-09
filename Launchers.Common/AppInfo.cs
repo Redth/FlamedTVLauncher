@@ -45,18 +45,26 @@ namespace Launchers.Common
 
             if (App != null) {
 
-                foreach (var m in metrics) {
-                    try {
-                        var pkgContext = context.CreatePackageContext (App.PackageName, PackageContextFlags.IgnoreSecurity);
-                        icon = pkgContext.Resources.GetDrawableForDensity (App.Icon, (int)m);
-                        break;
-                    } catch {
-                        continue;
+                var pkgContext = context.CreatePackageContext (App.PackageName, PackageContextFlags.IgnoreSecurity);
+
+                // Try and find the override first
+                if (overrideIcons.ContainsKey (App.PackageName)) {
+                    icon = context.Resources.GetDrawable (overrideIcons [App.PackageName]);
+                } else {
+                    // otherwise, go through the densities one by one
+                    foreach (var m in metrics) {
+                        try {
+                            icon = pkgContext.Resources.GetDrawableForDensity (App.Icon, (int)m);
+                            break;
+                        } catch {
+                            continue;
+                        }
                     }
                 }
+
             } else {
-                if (overrideIcons.ContainsKey ("Settings"))
-                    icon = context.Resources.GetDrawable (overrideIcons ["Settings"]);
+                if (overrideIcons.ContainsKey (PackageName))
+                    icon = context.Resources.GetDrawable (overrideIcons [PackageName]);
             }
 
 			return icon;
@@ -64,11 +72,11 @@ namespace Launchers.Common
 
 
 
-        public static void FetchApps (Context context, List<string> ignoredPackageNames, bool addSettings, Action<List<AppInfo>> callback)
+        public static void FetchApps (Context context, List<string> ignoredPackageNames, bool addSettings, Dictionary<string, string> renameMappings, Action<List<AppInfo>> callback)
 		{
 			Task.Factory.StartNew (() => {
 
-				var apps = FetchApps (context, addSettings, ignoredPackageNames);
+				var apps = FetchApps (context, addSettings, ignoredPackageNames, renameMappings);
 
 				callback (apps);
 			});
@@ -94,8 +102,8 @@ namespace Launchers.Common
 						continue;
                         
 					var label = app.LoadLabel (context.PackageManager);
-                    if (renameMappings.ContainsKey (context.PackageName))
-                        label = renameMappings [context.PackageName];
+                    if (renameMappings.ContainsKey (app.PackageName))
+                        label = renameMappings [app.PackageName];
 					
 					results.Add (new AppInfo {
 						LaunchIntent = launchIntent,
