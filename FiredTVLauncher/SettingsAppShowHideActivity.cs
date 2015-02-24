@@ -39,7 +39,7 @@ namespace FiredTVLauncher
 				else 
 					Settings.Instance.Blacklist.Add (app.PackageName);
 
-				Settings.Save ();
+				Settings.Instance.Save ();
 
 			};
 		}

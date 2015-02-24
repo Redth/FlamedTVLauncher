@@ -21,44 +21,23 @@ namespace FiredTVLauncher
 	{
 		Preference prefBlacklist;
 		Preference prefReorder;
-		EditTextPreference prefAppNameFontSize;
-		CheckBoxPreference prefHideLabels;
-        CheckBoxPreference prefHideTopBar;
-		CheckBoxPreference prefHideDate;
-		CheckBoxPreference prefHideTime;
-		CheckBoxPreference prefTwentyFourHourTime;
 		CheckBoxPreference prefDisableHomeDetect;
-        EditTextPreference prefIconBackgroundAlpha;
-        EditTextPreference prefLabelBackgroundAlpha;
-        EditTextPreference prefTopInfoBarBackgroundAlpha;
-        CheckBoxPreference prefWallpaperUse;
         EditTextPreference prefWallpaperUrl;
 
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
 
-            Settings.Load ();
+            Settings.Instance.Load ();
 
 			// Create your application here
 			AddPreferencesFromResource (Resource.Layout.Settings);
 
-			prefBlacklist = FindPreference ("pref_blacklist");
-			prefReorder = FindPreference ("pref_reorder");
-			prefHideLabels = (CheckBoxPreference)FindPreference ("pref_hidelabels");
-			prefAppNameFontSize = (EditTextPreference)FindPreference ("pref_applabelfontsize");
-			prefHideTopBar = (CheckBoxPreference)FindPreference ("pref_hidetopbar");
-			prefHideDate = (CheckBoxPreference)FindPreference ("pref_hidedate");
-			prefHideTime = (CheckBoxPreference)FindPreference ("pref_hidetime");
-			prefTwentyFourHourTime = (CheckBoxPreference)FindPreference ("pref_twentyfourhourtime");
-			prefDisableHomeDetect = (CheckBoxPreference)FindPreference ("pref_disablecheck");
-            prefIconBackgroundAlpha = (EditTextPreference)FindPreference ("pref_IconBackgroundAlpha");
-            prefLabelBackgroundAlpha = (EditTextPreference)FindPreference ("pref_LabelBackgroundAlpha");
-            prefTopInfoBarBackgroundAlpha = (EditTextPreference)FindPreference ("pref_TopInfoBarBackgroundAlpha");
-            prefWallpaperUse = (CheckBoxPreference)FindPreference ("pref_WallpaperUse");
-            prefWallpaperUrl = (EditTextPreference)FindPreference ("pref_WallpaperUrl");
+            prefBlacklist = FindPreference ("pref_blacklist");
+            prefReorder = FindPreference ("pref_reorder");
 
-			prefAppNameFontSize.EditText.InputType = Android.Text.InputTypes.ClassNumber;
+			prefDisableHomeDetect = (CheckBoxPreference)FindPreference ("pref_disablecheck");
+            prefWallpaperUrl = (EditTextPreference)FindPreference ("pref_WallpaperUrl");
 
 			prefBlacklist.PreferenceClick += delegate {
 				StartActivity (typeof (SettingsAppShowHideActivity));
@@ -67,72 +46,11 @@ namespace FiredTVLauncher
                 StartActivity (typeof (ReorderActivity));
 			};
 
-			prefAppNameFontSize.PreferenceChange += SaveHandler;
-			prefHideLabels.PreferenceChange += SaveHandler;			
-            prefHideTopBar.PreferenceChange += SaveHandler;
-			prefHideDate.PreferenceChange += SaveHandler;
-			prefHideTime.PreferenceChange += SaveHandler;
-			prefTwentyFourHourTime.PreferenceChange += SaveHandler;
-			prefDisableHomeDetect.PreferenceChange += SaveHandler;
-            prefIconBackgroundAlpha.PreferenceChange += SaveHandler;
-            prefLabelBackgroundAlpha.PreferenceChange += SaveHandler;
-            prefTopInfoBarBackgroundAlpha.PreferenceChange += SaveHandler;
-            prefWallpaperUse.PreferenceChange += SaveHandler;
-            prefWallpaperUrl.PreferenceChange += SaveHandler;
+            // Start the intent service, it will decide to stop itself or not
+            prefDisableHomeDetect.PreferenceChange += (sender, e) => 
+                StartService (new Intent (this, typeof(ExcuseMeService)));
 
-            prefAppNameFontSize.EditText.Text = Settings.Instance.LabelFontSize.ToString ();
-            prefHideLabels.Checked = Settings.Instance.HideLabels;
-            prefHideTopBar.Checked = Settings.Instance.HideTopBar;
-            prefHideDate.Checked = Settings.Instance.HideDate;
-            prefHideTime.Checked = Settings.Instance.HideTime;
-            prefTwentyFourHourTime.Checked = Settings.Instance.TwentyFourHourTime;
-            prefDisableHomeDetect.Checked = Settings.Instance.DisableHomeDetection;
-            prefIconBackgroundAlpha.EditText.Text = Settings.Instance.IconBackgroundAlpha.ToString ();
-            prefLabelBackgroundAlpha.EditText.Text = Settings.Instance.LabelBackgroundAlpha.ToString ();
-            prefTopInfoBarBackgroundAlpha.EditText.Text = Settings.Instance.TopInfoBarBackgroundAlpha.ToString ();
-            prefWallpaperUse.Checked = Settings.Instance.WallpaperUse;
-
-		}
-            
-		void SaveHandler (object sender, Preference.PreferenceChangeEventArgs e)
-		{
-			if (sender == prefHideLabels)
-				Settings.Instance.HideLabels = !prefHideLabels.Checked;
-            if (sender == prefHideTopBar)
-                Settings.Instance.HideTopBar = !prefHideTopBar.Checked;
-			if (sender == prefHideDate)
-				Settings.Instance.HideDate = !prefHideDate.Checked;
-			if (sender == prefTwentyFourHourTime)
-				Settings.Instance.TwentyFourHourTime = !prefTwentyFourHourTime.Checked;
-
-			if (sender == prefHideTime)	
-				Settings.Instance.HideTime = !prefHideTime.Checked;
-
-			if (sender == prefAppNameFontSize) {
-				var size = 16;
-				int.TryParse (prefAppNameFontSize.EditText.Text, out size);
-				Settings.Instance.LabelFontSize = size;
-			}
-
-			if (sender == prefDisableHomeDetect) {
-				Settings.Instance.DisableHomeDetection = !prefDisableHomeDetect.Checked;
-				StartService (new Intent(this, typeof(ExcuseMeService)));
-			}
-
-            if (sender == prefIconBackgroundAlpha)
-                Settings.Instance.IconBackgroundAlpha = ParseAlpha (prefIconBackgroundAlpha.EditText.Text);
-
-            if (sender == prefLabelBackgroundAlpha)
-                Settings.Instance.LabelBackgroundAlpha = ParseAlpha (prefLabelBackgroundAlpha.EditText.Text);
-
-            if (sender == prefTopInfoBarBackgroundAlpha)
-                Settings.Instance.TopInfoBarBackgroundAlpha = ParseAlpha (prefTopInfoBarBackgroundAlpha.EditText.Text);
-
-            if (sender == prefWallpaperUse)
-                Settings.Instance.WallpaperUse = !prefWallpaperUse.Checked;
-
-            if (sender == prefWallpaperUrl) {
-
+            prefWallpaperUrl.PreferenceChange += (sender, e) => {
                 AndHUD.Shared.Show(this, "Downloading Wallpaper...");
 
                 var url = prefWallpaperUrl.EditText.Text;
@@ -144,11 +62,9 @@ namespace FiredTVLauncher
                         var bytes = http.DownloadData (url);
                         var filename = Settings.GetWallpaperFilename ();
                         System.IO.File.WriteAllBytes (filename, bytes);
-
-                        Settings.Instance.WallpaperUrl = url;
-
-                        Settings.Save ();
                     } catch (Exception ex) {
+
+                        Settings.Instance.WallpaperUrl = string.Empty;
 
                         Toast.MakeText (this, "Failed to Download Wallpaper", ToastLength.Long).Show ();
                         Log.Error ("Downloading Wallpaper Failed", ex);
@@ -156,10 +72,8 @@ namespace FiredTVLauncher
 
                     AndHUD.Shared.Dismiss (this);
                 });
-            }
-
-			Settings.Save ();
-		}
+            };
+		}            
 
         int ParseAlpha (string value)
         {
