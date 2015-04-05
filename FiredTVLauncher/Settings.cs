@@ -37,49 +37,116 @@ namespace FiredTVLauncher
 
 		public static Settings Instance { get; set; }
 		public Settings ()
-		{
-			HomeDetectIntervalMs = 700;
-
-			Blacklist = new List<string> ();
+		{			
 			Ordering = new List<AppOrder> ();
-
-			HideLabels = false;
-			LabelFontSize = 18;
-			TwentyFourHourTime = false;
-
-            IconBackgroundAlpha = 120;
-            LabelBackgroundAlpha = 200;
-            TopInfoBarBackgroundAlpha = 120;
-
-            WallpaperUrl = "Default";
-            WallpaperUse = true;
-
-            DisableHomeDetection = true;
 		}
+
+        object orderingLockObj = new object();
 
 		public List<AppOrder> Ordering { get; set; }
 
-		public List<string> Blacklist { get; set; }
+		public List<string> Blacklist { 
+            get {
+                return getPrefs ().GetStringSet ("prefsBlacklist", new List<string> {
+                    "com.altusapps.firedtvlauncher",
+                    "com.amazon.avod",
+                    "com.amazon.bueller.photos",
+                    "com.amazon.device.bluetoothdfu",
+                    "com.amazon.device.gmo",
+                    "com.amazon.venezia",
+                    "com.amazon.storm.lightning.tutorial",
+                    "com.broadcom.wfd.client"
+                }).ToList ();
+            } 
+            set {
+                editPrefs ().PutStringSet ("prefsBlacklist", value).Commit ();
+            }
+        }
 
-        public bool HideTopBar { get; set; }
-		public bool HideLabels { get; set; }
-		public int LabelFontSize { get; set; }
+        public bool HideTopBar { 
+            get { return getPrefs ().GetBoolean ("pref_hidetopbar", false); }
+            set { editPrefs ().PutBoolean ("pref_hidetopbar", value).Commit (); }
+        }
 
-		public bool HideDate { get;set; }
-		public bool HideTime { get;set; }
-		public bool TwentyFourHourTime { get;set; }
+		public bool HideLabels { 
+            get { return getPrefs ().GetBoolean ("pref_hidelabels", false); }
+            set { editPrefs ().PutBoolean ("pref_hidelabels", value).Commit (); }
+        }
+		public int LabelFontSize { 
+            get { return getInt ("pref_applabelfontsize", 18); }
+            set { putInt ("pref_applabelfontsize", value); }
+        }
 
-        public int IconBackgroundAlpha { get;set; }
-        public int TopInfoBarBackgroundAlpha { get;set; }
-        public int LabelBackgroundAlpha { get;set; }
+		public bool HideDate { 
+            get { return getPrefs ().GetBoolean ("pref_hidedate", false); }
+            set { editPrefs ().PutBoolean ("pref_hidedate", value).Commit (); }
+        }
+		public bool HideTime {
+            get { return getPrefs ().GetBoolean ("pref_hidetime", false); }
+            set { editPrefs ().PutBoolean ("pref_hidetime", value).Commit (); }
+        }
+		public bool TwentyFourHourTime {
+            get { return getPrefs ().GetBoolean ("pref_twentyfourhourtime", false); }
+            set { editPrefs ().PutBoolean ("pref_twentyfourhourtime", value).Commit (); }
+        }
 
-		public int HomeDetectIntervalMs { get; set; }
+        public int IconBackgroundAlpha { 
+            get { return getInt ("pref_IconBackgroundAlpha", 120); }
+            set { putInt ("pref_IconBackgroundAlpha", value); }
+        }
+        public int TopInfoBarBackgroundAlpha {
+            get { return getInt ("pref_TopInfoBarBackgroundAlpha", 120); }
+            set { putInt ("pref_TopInfoBarBackgroundAlpha", value); }
+        }
+        public int LabelBackgroundAlpha {
+            get { return getInt ("pref_LabelBackgroundAlpha", 200); }
+            set { putInt ("pref_LabelBackgroundAlpha", value); }
+        }
 
-		public bool DisableHomeDetection { get;set; }
+		public int HomeDetectIntervalMs {
+            get { return getInt ("pref_HomeDetectIntervalMs", 700); }
+            set { putInt ("pref_HomeDetectIntervalMs", value); }
+        }
 
-        public bool WallpaperUse { get;set; }
-        public string WallpaperUrl { get;set; }
+		public bool DisableHomeDetection {
+            get { return getPrefs ().GetBoolean ("pref_disablecheck", false); }
+            set { editPrefs ().PutBoolean ("pref_disablecheck", value).Commit (); }
+        }
 
+        public bool WallpaperUse {
+            get { return getPrefs ().GetBoolean ("pref_WallpaperUse", false); }
+            set { editPrefs ().PutBoolean ("pref_WallpaperUse", value).Commit (); }
+        }
+        public string WallpaperUrl { 
+            get { return getPrefs ().GetString ("pref_WallpaperUrl", string.Empty); }
+            set { editPrefs ().PutString ("pref_WallpaperUrl", value).Commit (); }
+        }
+
+        int getInt (string key, int defaultValue)
+        {
+            var s = getPrefs ().GetString (key, defaultValue.ToString ());
+
+            int i = defaultValue;
+            int.TryParse (s, out i);
+
+            return i;
+        }
+
+        void putInt (string key, int value)
+        {
+            editPrefs ().PutString (key, value.ToString ()).Commit ();
+        }
+
+        ISharedPreferences getPrefs ()
+        {
+            return Android.Preferences.PreferenceManager.GetDefaultSharedPreferences (Application.Context);
+        }
+
+        ISharedPreferencesEditor editPrefs ()
+        {
+            var prefs = Android.Preferences.PreferenceManager.GetDefaultSharedPreferences (Application.Context);
+            return prefs.Edit ();
+        }
 
         public static string GetWallpaperFilename() 
         {
@@ -104,103 +171,120 @@ namespace FiredTVLauncher
 				}
 			}
 
-			Ordering.Sort ((o1, o2) => o1.Order.CompareTo (o2.Order));
+            lock (orderingLockObj) {
+                Ordering.Sort ((o1, o2) => o1.Order.CompareTo (o2.Order));
 
-			var i = 1;
-			foreach (var app in Ordering)
-				app.Order = i++;
+                var i = 1;
+                foreach (var app in Ordering)
+                    app.Order = i++;
+            }
 
 			Save ();
 		}
 
         public AppOrder GetAppOrder (string packageName)
         {
-            var order = Ordering.FirstOrDefault (ao => ao.PackageName.Equals (packageName));
+            lock (orderingLockObj) {
+                var order = Ordering.FirstOrDefault (ao => ao.PackageName.Equals (packageName));
 
-            // Make sure the current ordering actually exists
-            if (order == null) {
-                var index = 1;
-                // If it doesn't exist, let's assume last in line
-                var after = Ordering.LastOrDefault ();
-                if (after != null)
-                    index = after.Order + 1;
+                // Make sure the current ordering actually exists
+                if (order == null) {
+                    var index = 1;
+                    // If it doesn't exist, let's assume last in line
+                    var after = Ordering.LastOrDefault ();
+                    if (after != null)
+                        index = after.Order + 1;
 
-                // Make our order
-                order = new AppOrder {
-                    PackageName = packageName,
-                    Order = index
-                };
+                    // Make our order
+                    order = new AppOrder {
+                        PackageName = packageName,
+                        Order = index
+                    };
 
-                // Order didn't exist so let's add it
-                Ordering.Add (order);
+                    // Order didn't exist so let's add it
+                    Ordering.Add (order);
+                }
+
+                return order;
             }
-
-            return order;
         }
 
         public void MoveOrder (string packageName, bool up)
         {
             var order = GetAppOrder (packageName);
 
-            // Can only go so far up
-            if (up && order.Order <= 1)
+            lock (orderingLockObj) {
+                // Can only go so far up
+                if (up && order.Order <= 1)
+                    return;
+
+                if (!up && order.Order >= Ordering.Count) // Ordering.Last ().PackageName.Equals (packageName))
                 return;
 
-            if (!up && order.Order >= Ordering.Count) // Ordering.Last ().PackageName.Equals (packageName))
-                return;
+                if (up)
+                    order.Order = order.Order - 1;
+                else
+                    order.Order = order.Order + 1;
 
-            if (up)
-                order.Order = order.Order - 1;
-            else
-                order.Order = order.Order + 1;
-
-            foreach (var appOrder in Ordering) {
-                if (appOrder.Order == order.Order
+                foreach (var appOrder in Ordering) {
+                    if (appOrder.Order == order.Order
                     && !appOrder.PackageName.Equals (order.PackageName)) {
 
-                    if (up)
-                        appOrder.Order = appOrder.Order + 1;
-                    else
-                        appOrder.Order = appOrder.Order - 1;
+                        if (up)
+                            appOrder.Order = appOrder.Order + 1;
+                        else
+                            appOrder.Order = appOrder.Order - 1;
+                    }
                 }
             }
 
             Save ();
         }
 
-		public static void Save ()
+		public void Save ()
 		{
-			var path = Path.Combine (System.Environment.GetFolderPath (System.Environment.SpecialFolder.MyDocuments), "settings2.json");
-            try {
-                File.WriteAllText (path, Newtonsoft.Json.JsonConvert.SerializeObject (Settings.Instance));
-                Log.Debug ("Settings Saved to {0}", path);
+            var appOrders = new List<string> ();
+
+            lock (orderingLockObj) {
+                foreach (var o in Ordering) {
+                    var s = string.Format ("{0}|{1}", o.Order, o.PackageName);
+                    appOrders.Add (s);
+                }
+            }
+
+            try { 
+                editPrefs ().PutStringSet ("prefsAppOrder", appOrders).Commit ();
             } catch (Exception ex) {
-                Log.Error ("Failed to write settings file", ex);
+                Console.WriteLine ("Save order exception: " + ex);
             }
 		}
 
-        public static void Load ()
+        public void Load ()
 		{
-			var path = Path.Combine (System.Environment.GetFolderPath (System.Environment.SpecialFolder.MyDocuments), "settings2.json");
+            var appOrders = getPrefs ().GetStringSet ("prefsAppOrder", new List<string> ()).ToList ();
 
-            try {
-                Settings.Instance = Newtonsoft.Json.JsonConvert.DeserializeObject <Settings> (File.ReadAllText (path));
-                Log.Debug ("Settings Loaded from {0}", path);
-            }
-            catch (Exception ex) {
-                Log.Error ("Failed to load settings file", ex);
-                Settings.Instance = new Settings ();
+            var ordering = new List<AppOrder> ();
 
-                if (Settings.Instance.Blacklist.Count <= 0) {
-                    Settings.Instance.Blacklist.Add ("com.altusapps.firedtvlauncher");
-                    Settings.Instance.Blacklist.Add ("com.amazon.avod");
-                    Settings.Instance.Blacklist.Add ("com.amazon.bueller.photos");
-                    Settings.Instance.Blacklist.Add ("com.amazon.device.bluetoothdfu");
-                    Settings.Instance.Blacklist.Add ("com.amazon.device.gmo");
-                    Settings.Instance.Blacklist.Add ("com.amazon.venezia");   
-                    Settings.Instance.Blacklist.Add ("com.amazon.storm.lightning.tutorial");
-                    Settings.Instance.Blacklist.Add ("com.broadcom.wfd.client");
+
+                foreach (var s in appOrders) {
+                    var parts = s.Split (new char [] { '|' }, 2);
+
+                    if (parts.Length == 2) {
+                        int order = 0;
+                        if (int.TryParse (parts [0], out order)) {
+                            ordering.Add (new AppOrder {
+                                Order = order,
+                                PackageName = parts [1]
+                            });
+                        }
+                    }
                 }
+
+            ordering.Sort ((o1, o2) => o1.Order.CompareTo (o2.Order));
+
+            lock (orderingLockObj) {
+                Ordering.Clear ();
+                Ordering.AddRange (ordering);
             }
 		}
 

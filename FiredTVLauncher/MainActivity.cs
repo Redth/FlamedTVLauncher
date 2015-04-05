@@ -73,7 +73,7 @@ namespace FiredTVLauncher
 		{
 			base.OnResume ();
 
-            Settings.Load ();
+            Settings.Instance.Load ();
 
 			Setup ();
 
@@ -125,7 +125,7 @@ namespace FiredTVLauncher
             if (item.ItemId == 0) {
                 // Hide
                 Settings.Instance.Blacklist.Add (app.PackageName);
-                Settings.Save ();
+                Settings.Instance.Save ();
                 adapter.Reload ();
                 Toast.MakeText (this, "Hiding " + app.Name, ToastLength.Short).Show ();
             } else if (item.ItemId == 1) {
