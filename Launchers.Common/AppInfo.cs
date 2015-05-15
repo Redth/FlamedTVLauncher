@@ -37,7 +37,7 @@ namespace Launchers.Common
 			Drawable icon = null;
            
             var metrics = new List<DisplayMetricsDensity> {
-                DisplayMetricsDensity.Xxxhigh,
+                //DisplayMetricsDensity.Xxxhigh,
                 DisplayMetricsDensity.Xxhigh,
                 DisplayMetricsDensity.Xhigh,
                 DisplayMetricsDensity.Tv
