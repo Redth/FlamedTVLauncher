@@ -22,5 +22,15 @@ namespace FiredTVLauncher
 			context.StartService (new Intent(context, typeof(ExcuseMeService)));
 		}
 	}
+
+    [BroadcastReceiver]
+    [IntentFilter(new String[]{ Intent.ActionScreenOn })]
+    public class ScreenOnBroadcastReceiver : BroadcastReceiver
+    {
+        public override void OnReceive (Context context, Intent intent)
+        {
+            context.StartService (new Intent(context, typeof(ExcuseMeService)));
+        }
+    }
 }
 
