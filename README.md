@@ -21,6 +21,16 @@ Once you've downloaded the file, follow these steps:
 7. Find 'FiredTV' in the list, and select it
 8. Select 'Launch Application'
 
+###Update Process
+To update to a newer version of this app, you have to do it like that:
+
+1. Deinstall the app first.
+1.1 Either by doing it in the FireTV itself (Settings > Applications > Manage Installed Applications > FireTV Launcher > Uninstall), or
+1.2 by using adb:
+1.2.1 `adb connect xxx.xxx.xxx.xxx` to connect to your FireTV where xxx.xxx.xxx.xxx is the IP address of your FireTV
+1.2.2 `adb uninstall com.altusapps.firedtvlauncher`
+2. And then simply reinstall the app following the instructions from the "Installation" process.
+
 ###Where's the Java?
 If you looked at the source, you may have noticed that there's no Java.  That's because this was written entirely in C# using [Xamarin](http://xamarin.com)!  C# is awesome, go use Xamarin!
 
