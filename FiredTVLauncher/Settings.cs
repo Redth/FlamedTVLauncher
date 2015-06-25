@@ -39,29 +39,14 @@ namespace FiredTVLauncher
 		public Settings ()
 		{			
 			Ordering = new List<AppOrder> ();
+            Blacklist = new List<string> ();
 		}
 
         object orderingLockObj = new object();
 
 		public List<AppOrder> Ordering { get; set; }
 
-		public List<string> Blacklist { 
-            get {
-                return getPrefs ().GetStringSet ("prefsBlacklist", new List<string> {
-                    "com.altusapps.firedtvlauncher",
-                    "com.amazon.avod",
-                    "com.amazon.bueller.photos",
-                    "com.amazon.device.bluetoothdfu",
-                    "com.amazon.device.gmo",
-                    "com.amazon.venezia",
-                    "com.amazon.storm.lightning.tutorial",
-                    "com.broadcom.wfd.client"
-                }).ToList ();
-            } 
-            set {
-                editPrefs ().PutStringSet ("prefsBlacklist", value).Commit ();
-            }
-        }
+		public List<string> Blacklist { get; set; }
 
         public bool HideTopBar { 
             get { return getPrefs ().GetBoolean ("pref_hidetopbar", false); }
@@ -257,6 +242,13 @@ namespace FiredTVLauncher
             } catch (Exception ex) {
                 Console.WriteLine ("Save order exception: " + ex);
             }
+
+            try {
+                editPrefs ().PutStringSet ("prefsBlacklist", Blacklist).Commit ();
+            } catch (Exception ex) {
+                Console.WriteLine ("Save blacklist exception: " + ex);
+            }
+
 		}
 
         public void Load ()
@@ -286,6 +278,20 @@ namespace FiredTVLauncher
                 Ordering.Clear ();
                 Ordering.AddRange (ordering);
             }
+
+
+            Blacklist = getPrefs ().GetStringSet ("prefsBlacklist", new List<string> {
+                "com.altusapps.firedtvlauncher",
+                "com.amazon.avod",
+                "com.amazon.bueller.photos",
+                "com.amazon.device.bluetoothdfu",
+                "com.amazon.device.gmo",
+                "com.amazon.venezia",
+                "com.amazon.storm.lightning.tutorial",
+                "com.broadcom.wfd.client",
+                "com.amazon.cpl",
+            }).ToList ();
+
 		}
 
 		public static bool IsFireTV () {
