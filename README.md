@@ -27,6 +27,7 @@ To update to a newer version of this app, first you must uninstall the old versi
 You can do this on the FireTV itself (Settings > Applications > Manage Installed Applications > FireTV Launcher > Uninstall)
 
 Or, you can use adb:
+
 1. `adb connect xxx.xxx.xxx.xxx` to connect to your FireTV where xxx.xxx.xxx.xxx is the IP address of your FireTV
 2. `adb uninstall com.altusapps.firedtvlauncher`
 
