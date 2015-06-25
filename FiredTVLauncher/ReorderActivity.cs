@@ -19,6 +19,8 @@ namespace FiredTVLauncher
     {
         ReorderAdapter adapter;
 
+        int currentPosition = -1;
+
         protected override void OnCreate (Bundle bundle)
         {
             base.OnCreate (bundle);
@@ -31,27 +33,33 @@ namespace FiredTVLauncher
 
             adapter.Reload ();
 
-            ListView.ItemLongClick += (sender, e) => {
-                var p = e.Position;
-
-                if (adapter.SelectedPosition >= 0) {
-                    adapter.SelectedPosition = -1;
-                    adapter.NotifyDataSetChanged ();
-                }
-
-                Console.WriteLine ("LONG PRESS: " + p);
-
-                adapter.SelectedPosition = p;
-                adapter.NotifyDataSetChanged ();
-
-                Toast.MakeText (this, "Move the item up and down, click again when done!", ToastLength.Long).Show ();
-
-            };
+//            ListView.ItemLongClick += (sender, e) => {
+//                var p = e.Position;
+//
+//                if (adapter.SelectedPosition >= 0) {
+//                    adapter.SelectedPosition = -1;
+//                    adapter.NotifyDataSetChanged ();
+//                }
+//
+//                Console.WriteLine ("LONG PRESS: " + p);
+//
+//                adapter.SelectedPosition = p;
+//                adapter.NotifyDataSetChanged ();
+//
+//                Toast.MakeText (this, "Move the item up and down, click again when done!", ToastLength.Long).Show ();
+//
+//            };
             ListView.ItemClick += (sender, e) => {
 
-                adapter.SelectedPosition = -1;
-                adapter.NotifyDataSetChanged ();
+                currentPosition = e.Position;
+
+                //e.Parent.ShowContextMenuForChild (e.View);
+                OpenContextMenu (ListView);
+                //adapter.SelectedPosition = -1;
+                //adapter.NotifyDataSetChanged ();
             };
+
+            RegisterForContextMenu (ListView);
 
             Toast.MakeText (this, "Select the item you want to move, then long click enter...", ToastLength.Long).Show ();
 
@@ -59,37 +67,75 @@ namespace FiredTVLauncher
 
         static bool keyUp = false;
 
-        public override bool OnKeyUp (Keycode keyCode, KeyEvent e)
+        public override void OnCreateContextMenu (IContextMenu menu, View v, IContextMenuContextMenuInfo menuInfo)
         {
-            if (keyUp)
-                return true;
+            base.OnCreateContextMenu (menu, v, menuInfo);
 
-            keyUp = true;
+            menu.Add ("Up");
+            menu.Add ("Down");           
+        }
 
-            base.OnKeyUp (keyCode, e);
+        public override bool OnContextItemSelected (IMenuItem item)
+        {
+            var ok = base.OnContextItemSelected (item);
 
-            if (adapter.SelectedPosition >= 0) {
+            if (currentPosition >= 0) {
 
-                if (e.KeyCode == Keycode.DpadUp) {
+                if (item.TitleFormatted.ToString () == "Up") {
                     Console.WriteLine ("ORDER UP");
-                    adapter.Reorder (adapter.SelectedPosition, true);
-                    ListView.SetSelection (adapter.SelectedPosition);
-                    ScrollListView ();
-                    keyUp = false;
-                    return true;
-                } else if (e.KeyCode == Keycode.DpadDown) {
+                    adapter.Reorder (currentPosition, true);
+                    //ScrollListView ();
+                    var sel = currentPosition - 1;
+                    if (sel < 0)
+                        sel = 0;
+                    ListView.SetSelection (sel);
+                } else {
                     Console.WriteLine ("ORDER DOWN");
-                    adapter.Reorder (adapter.SelectedPosition, false);
-                    ListView.SetSelection (adapter.SelectedPosition);
-                    ScrollListView ();
-                    keyUp = false;
-                    return true;
+                    adapter.Reorder (currentPosition, false);
+                    //ScrollListView ();
+                    var sel = currentPosition + 1;
+                    if (sel > adapter.Count - 1)
+                        sel = adapter.Count - 1;
+                    ListView.SetSelection (sel);
                 }
+
+                currentPosition = -1;
             }
 
-            keyUp = false;
-            return false;
+            return ok;
         }
+
+//        public override bool OnKeyUp (Keycode keyCode, KeyEvent e)
+//        {
+//            if (keyUp)
+//                return true;
+//
+//            keyUp = true;
+//
+//            base.OnKeyUp (keyCode, e);
+//
+//            if (adapter.SelectedPosition >= 0) {
+//
+//                if (e.KeyCode == Keycode.DpadUp) {
+//                    Console.WriteLine ("ORDER UP");
+//                    adapter.Reorder (adapter.SelectedPosition, true);
+//                    ListView.SetSelection (adapter.SelectedPosition);
+//                    ScrollListView ();
+//                    keyUp = false;
+//                    return true;
+//                } else if (e.KeyCode == Keycode.DpadDown) {
+//                    Console.WriteLine ("ORDER DOWN");
+//                    adapter.Reorder (adapter.SelectedPosition, false);
+//                    ListView.SetSelection (adapter.SelectedPosition);
+//                    ScrollListView ();
+//                    keyUp = false;
+//                    return true;
+//                }
+//            }
+//
+//            keyUp = false;
+//            return false;
+//        }
 
         void ScrollListView ()
         {
@@ -137,9 +183,9 @@ namespace FiredTVLauncher
 //                Console.WriteLine ("DOWN");
 //            };           
 
-            if (SelectedPosition == position)
-                view.FindViewById<ImageView> (Resource.Id.imageReorder).Visibility = ViewStates.Visible;
-            else
+//            if (SelectedPosition == position)
+//                view.FindViewById<ImageView> (Resource.Id.imageReorder).Visibility = ViewStates.Visible;
+//            else
                 view.FindViewById<ImageView> (Resource.Id.imageReorder).Visibility = ViewStates.Invisible;
 
             return view;
@@ -173,7 +219,7 @@ namespace FiredTVLauncher
 
         public void Reload () 
         {
-            AppInfo.FetchApps (Context, Settings.Instance.Blacklist, true, Settings.RENAME_MAPPINGS, r => {
+            AppInfo.FetchApps (Context, Settings.Instance.Blacklist, true, true, Settings.RENAME_MAPPINGS, r => {
 
                 Apps.Clear ();
                 Apps.AddRange (r);
