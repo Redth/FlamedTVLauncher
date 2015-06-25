@@ -63,7 +63,7 @@ namespace FiredTVLauncher
 		public void Reload () 
 		{
 
-            AppInfo.FetchApps (Context, Settings.Instance.Blacklist, true, Settings.RENAME_MAPPINGS, r => {
+            AppInfo.FetchApps (Context, Settings.Instance.Blacklist, true, true, Settings.RENAME_MAPPINGS, r => {
 
 				Apps.Clear ();
 				Apps.AddRange (r);

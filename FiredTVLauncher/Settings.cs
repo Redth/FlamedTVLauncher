@@ -23,6 +23,7 @@ namespace FiredTVLauncher
 
         public static readonly Dictionary<string, int> ICON_OVERRIDES = new Dictionary<string, int> {
             { Android.Provider.Settings.ActionSettings, Resource.Drawable.settings },
+            { "APP_SETTINGS", Resource.Drawable.settings },
             { Settings.HOME_PACKAGE_NAME, Resource.Drawable.firetvicon },           
         };
 

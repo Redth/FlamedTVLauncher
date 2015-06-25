@@ -72,17 +72,17 @@ namespace Launchers.Common
 
 
 
-        public static void FetchApps (Context context, List<string> ignoredPackageNames, bool addSettings, Dictionary<string, string> renameMappings, Action<List<AppInfo>> callback)
+        public static void FetchApps (Context context, List<string> ignoredPackageNames, bool addSettings, bool addAppSettings, Dictionary<string, string> renameMappings, Action<List<AppInfo>> callback)
 		{
 			Task.Factory.StartNew (() => {
 
-				var apps = FetchApps (context, addSettings, ignoredPackageNames, renameMappings);
+				var apps = FetchApps (context, addSettings, addAppSettings, ignoredPackageNames, renameMappings);
 
 				callback (apps);
 			});
 		}
 
-        static List<AppInfo> FetchApps (Context context, bool addSettings = false, List<string> ignoredPackageNames = null, Dictionary<string, string> renameMappings = null)
+        static List<AppInfo> FetchApps (Context context, bool addSettings = false, bool addAppSettings = false, List<string> ignoredPackageNames = null, Dictionary<string, string> renameMappings = null)
 		{
             if (renameMappings == null)
                 renameMappings = new Dictionary<string, string> ();
@@ -115,21 +115,24 @@ namespace Launchers.Common
 			}
 
 			if (!ignoredPackageNames.Contains (Android.Provider.Settings.ActionSettings) && addSettings) {
-
-                // FROM Logcat, we can see settings calls this intent:
-                // {act=android.intent.action.VIEW cat=[com.amazon.device.intent.category.LAUNCHER_MENU] flg=0x14000000 cmp=com.amazon.tv.launcher/.ui.SettingsActivity (has extras)} from pid 11366
-                // So let's construct that same one to use
-                var settingsIntent = new Intent ("android.intent.action.VIEW");
-                settingsIntent.AddCategory ("com.amazon.device.intent.category.LAUNCHER_MENU");
-                settingsIntent.SetComponent (new ComponentName ("com.amazon.tv.launcher", "com.amazon.tv.launcher.ui.SettingsActivity"));
-                    
+                
                 results.Add (new AppInfo {
-					LaunchIntent = settingsIntent,
-					Name = "Settings",
+                    LaunchIntent = new Intent (Android.Provider.Settings.ActionSettings),
+					Name = "TV Settings",
 					App = null,
 					PackageName = Android.Provider.Settings.ActionSettings
 				});
 			}
+
+            if (!ignoredPackageNames.Contains ("APP_SETTINGS") && addAppSettings) {
+
+                results.Add (new AppInfo {
+                    LaunchIntent = null,
+                    Name = "App Settings",
+                    App = null,
+                    PackageName = "APP_SETTINGS"
+                });
+            }
 
 			return results.OrderBy(x => x.Name).ToList ();
 		}

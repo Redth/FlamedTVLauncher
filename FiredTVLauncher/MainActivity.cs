@@ -59,7 +59,15 @@ namespace FiredTVLauncher
 				if (app.PackageName == Settings.HOME_PACKAGE_NAME)
 					ExcuseMeService.AllowFireTVHome = true;
 
+                if (app.PackageName == "APP_SETTINGS") {
+                    StartActivity (typeof(SettingsActivity));
+                    return;
+                }
+                
 				StartActivity (app.LaunchIntent);
+
+                if (app.PackageName == Android.Provider.Settings.ActionSettings)
+                    Toast.MakeText (this, "You may need to press 'UP' on your remote", ToastLength.Long).Show ();
 			};
 
 			gridView.Adapter = adapter;

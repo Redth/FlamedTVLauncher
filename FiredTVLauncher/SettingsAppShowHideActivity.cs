@@ -84,7 +84,7 @@ namespace FiredTVLauncher
 
 		public void Reload ()
 		{
-            AppInfo.FetchApps (Context, null, true, Settings.RENAME_MAPPINGS, r => {
+            AppInfo.FetchApps (Context, null, true, true, Settings.RENAME_MAPPINGS, r => {
 
 				apps.Clear ();
 				apps.AddRange (r);
