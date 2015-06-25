@@ -115,8 +115,16 @@ namespace Launchers.Common
 			}
 
 			if (!ignoredPackageNames.Contains (Android.Provider.Settings.ActionSettings) && addSettings) {
-				results.Add (new AppInfo {
-					LaunchIntent = new Intent (Android.Provider.Settings.ActionSettings),
+
+                // FROM Logcat, we can see settings calls this intent:
+                // {act=android.intent.action.VIEW cat=[com.amazon.device.intent.category.LAUNCHER_MENU] flg=0x14000000 cmp=com.amazon.tv.launcher/.ui.SettingsActivity (has extras)} from pid 11366
+                // So let's construct that same one to use
+                var settingsIntent = new Intent ("android.intent.action.VIEW");
+                settingsIntent.AddCategory ("com.amazon.device.intent.category.LAUNCHER_MENU");
+                settingsIntent.SetComponent (new ComponentName ("com.amazon.tv.launcher", "com.amazon.tv.launcher.ui.SettingsActivity"));
+                    
+                results.Add (new AppInfo {
+					LaunchIntent = settingsIntent,
 					Name = "Settings",
 					App = null,
 					PackageName = Android.Provider.Settings.ActionSettings
