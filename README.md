@@ -22,9 +22,8 @@ Once you've downloaded the file, follow these steps:
 8. Select 'Launch Application'
 
 ###Update Process
-To update to a newer version of this app, you have to do it like that:
+To update to a newer version of this app, first you must uninstall the old version.
 
-#### Uninstall the app first.
 You can do this on the FireTV itself (Settings > Applications > Manage Installed Applications > FireTV Launcher > Uninstall)
 
 Or, you can use adb:
