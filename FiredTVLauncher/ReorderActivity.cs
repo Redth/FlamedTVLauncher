@@ -61,7 +61,7 @@ namespace FiredTVLauncher
 
             RegisterForContextMenu (ListView);
 
-            Toast.MakeText (this, "Select the item you want to move, then long click enter...", ToastLength.Long).Show ();
+            //Toast.MakeText (this, "Select the item you want to move, then long click enter...", ToastLength.Long).Show ();
 
         }
 
