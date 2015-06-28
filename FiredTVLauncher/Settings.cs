@@ -133,11 +133,20 @@ namespace FiredTVLauncher
             return prefs.Edit ();
         }
 
+		/**
+		 * Return the default wallpaper path
+		 */
+		public static string GetWallpaperPath()
+		{
+			var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+			return System.IO.Path.Combine(path, "wallpaper.png");
+		}
+			
+
         public static string GetWallpaperFilename() 
         {
-            try {
-                var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
-                var filename = System.IO.Path.Combine(path, "wallpaper.png");
+            try {                
+				var filename = Settings.GetWallpaperPath();
 
                 if (File.Exists (filename))
                     return filename;

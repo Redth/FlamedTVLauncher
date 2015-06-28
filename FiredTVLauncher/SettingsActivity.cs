@@ -53,20 +53,22 @@ namespace FiredTVLauncher
             prefWallpaperUrl.PreferenceChange += (sender, e) => {
                 AndHUD.Shared.Show(this, "Downloading Wallpaper...");
 
-                var url = prefWallpaperUrl.EditText.Text;
+				var url = prefWallpaperUrl.EditText.Text;
 
-                Task.Factory.StartNew (() => {
+				if(url.IndexOf("http://") == -1){
+					url = string.Concat("http://",url);
+				}
 
+                Task.Run (() => {
                     try {
-                        var http = new System.Net.WebClient ();
-                        var bytes = http.DownloadData (url);
-                        var filename = Settings.GetWallpaperFilename ();
+						var http = new System.Net.WebClient();
+                        var bytes = http.DownloadData(url);
+						var filename = Settings.GetWallpaperPath();
                         System.IO.File.WriteAllBytes (filename, bytes);
                     } catch (Exception ex) {
 
                         Settings.Instance.WallpaperUrl = string.Empty;
-
-                        Toast.MakeText (this, "Failed to Download Wallpaper", ToastLength.Long).Show ();
+						//Toast.MakeText (this, "Failed to Download Wallpaper", ToastLength.Long).Show ();
                         Log.Error ("Downloading Wallpaper Failed", ex);
                     }
 
