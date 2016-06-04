@@ -60,13 +60,13 @@ namespace FiredTVLauncher
                     try {
                         var http = new System.Net.WebClient ();
                         var bytes = http.DownloadData (url);
-                        var filename = Settings.GetWallpaperFilename ();
+                        var filename = Settings.GetWallpaperFilename (false);
                         System.IO.File.WriteAllBytes (filename, bytes);
                     } catch (Exception ex) {
 
                         Settings.Instance.WallpaperUrl = string.Empty;
 
-                        Toast.MakeText (this, "Failed to Download Wallpaper", ToastLength.Long).Show ();
+                        RunOnUiThread (() => Toast.MakeText (this, "Failed to Download Wallpaper", ToastLength.Long).Show ());
                         Log.Error ("Downloading Wallpaper Failed", ex);
                     }
 

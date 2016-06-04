@@ -133,13 +133,13 @@ namespace FiredTVLauncher
             return prefs.Edit ();
         }
 
-        public static string GetWallpaperFilename() 
+        public static string GetWallpaperFilename(bool checkExist = true) 
         {
             try {
                 var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
                 var filename = System.IO.Path.Combine(path, "wallpaper.png");
 
-                if (File.Exists (filename))
+                if (File.Exists (filename) || !checkExist)
                     return filename;
             } catch {
             }
