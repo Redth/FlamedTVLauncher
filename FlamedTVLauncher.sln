@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FiredTVLauncher", "FiredTVLauncher\FiredTVLauncher.csproj", "{EBB26210-D4C3-4497-A0DC-5814E634690A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launchers.Common", "Launchers.Common\Launchers.Common.csproj", "{197B6A4D-204B-43D5-A732-845AD8D30BF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlamedTVLauncher", "FlamedTVLauncher\FlamedTVLauncher.csproj", "{EBB26210-D4C3-4497-A0DC-5814E634690A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
