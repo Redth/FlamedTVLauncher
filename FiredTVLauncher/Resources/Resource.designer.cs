@@ -63,7 +63,6 @@ namespace FiredTVLauncher
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahText = global::FiredTVLauncher.Resource.Styleable.ProgressWheel_ahText;
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahTextColor = global::FiredTVLauncher.Resource.Styleable.ProgressWheel_ahTextColor;
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahTextSize = global::FiredTVLauncher.Resource.Styleable.ProgressWheel_ahTextSize;
-			global::Launchers.Common.Resource.String.library_name = global::FiredTVLauncher.Resource.String.library_name;
 		}
 		
 		public partial class Attribute
