@@ -1,14 +1,16 @@
-# FiredTV Launcher
+# FlamedTV Launcher
 
-FiredTV Launcher is a 'replacement' for Amazon's Home/Launcher app which does not show sideloaded apps.
+FlamedTV Launcher is a 'replacement' for Amazon's Home/Launcher app which does not show sideloaded apps.
 
-![FiredTV Launcher](Art/Screens/firedtv-new-01.png)
+*NOTE: Do to a legal request from Amazon, the name of this launcher was recently changed to 'FlamedTV Launcher'*
+
+![FlamedTV Launcher](Art/Screens/firedtv-new-01.png)
 
 ###How does it work?
-While it's not possible (yet/without root) to actually replace the launcher app, FiredTV effectively does this by watching for Amazon's launcher being opened, and then immediately launches itself.  Because of this, you will see Amazon's home screen flash on the screen very briefly after pressing the home button, before FiredTV Launcher appears.
+While it's not possible (yet/without root) to actually replace the launcher app, FlamedTV effectively does this by watching for Amazon's launcher being opened, and then immediately launches itself.  Because of this, you will see Amazon's home screen flash on the screen very briefly after pressing the home button, before FlamedTV Launcher appears.
 
 ###Installation
-First, head over to the [Releases Page](https://github.com/Redth/FiredTVLauncher/releases) and get the latest version .apk file.
+First, head over to the [Releases Page](https://github.com/Redth/FlamedTVLauncher/releases) and get the latest version .apk file.
 
 Once you've downloaded the file, follow these steps:
 
@@ -18,7 +20,7 @@ Once you've downloaded the file, follow these steps:
 4. `adb install /path/to/com.altusapps.firedtvlauncher-1.x.x.apk` to install the app to your device
 5. On your FireTV, open the settings
 6. Go into Applications
-7. Find 'FiredTV' in the list, and select it
+7. Find 'FlamedTV' in the list, and select it
 8. Select 'Launch Application'
 
 ###Update Process
